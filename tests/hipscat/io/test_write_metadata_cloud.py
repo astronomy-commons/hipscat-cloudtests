@@ -5,12 +5,27 @@ import os
 import hipscat.io.write_metadata as io
 import hipscat.pixel_math as hist
 import numpy.testing as npt
+import pyarrow as pa
 import pytest
 from hipscat.catalog.catalog_info import CatalogInfo
 from hipscat.io import file_io
 from hipscat.io.parquet_metadata import write_parquet_metadata
 
-from hipscat_cloudtests import TempCloudDirectory
+from hipscat_cloudtests import TempCloudDirectory, assert_text_file_matches
+
+
+@pytest.fixture
+def basic_catalog_parquet_metadata():
+    return pa.schema(
+        [
+            pa.field("id", pa.int64()),
+            pa.field("ra", pa.float64()),
+            pa.field("dec", pa.float64()),
+            pa.field("ra_error", pa.int64()),
+            pa.field("dec_error", pa.int64()),
+            pa.field("__index_level_0__", pa.int64()),
+        ]
+    )
 
 
 @pytest.fixture
@@ -30,9 +45,7 @@ def catalog_info(catalog_info_data) -> CatalogInfo:
     return CatalogInfo(**catalog_info_data)
 
 
-def test_write_catalog_info(
-    assert_text_file_matches, tmp_dir_cloud, catalog_info, example_cloud_storage_options
-):
+def test_write_catalog_info(tmp_dir_cloud, catalog_info, example_cloud_storage_options):
     """Test that we accurately write out catalog metadata"""
     with TempCloudDirectory(tmp_dir_cloud, "write_catalog_info", example_cloud_storage_options) as temp_path:
         catalog_base_dir = temp_path
@@ -58,9 +71,7 @@ def test_write_catalog_info(
         )
 
 
-def test_write_provenance_info(
-    assert_text_file_matches, tmp_dir_cloud, catalog_info, example_cloud_storage_options
-):
+def test_write_provenance_info(tmp_dir_cloud, catalog_info, example_cloud_storage_options):
     """Test that we accurately write out tool-provided generation metadata"""
     with TempCloudDirectory(
         tmp_dir_cloud, "write_provenance_info", example_cloud_storage_options
