@@ -38,6 +38,9 @@ jobs:
     - name: List dependencies
       run: |
         pip list
-    - name: Run unit tests with pytest
+    - name: Run ABFS unit tests with pytest
       run: |
-        python -m pytest tests
+        python -m pytest tests --cloud abfs
+      env:
+        ABFS_LINCCDATA_ACCOUNT_NAME: ${{ secrets.LINCC_ABFS_ACCOUNT_NAME }}
+        ABFS_LINCCDATA_ACCOUNT_KEY: ${{ secrets.LINCC_ABFS_ACCOUNT_KEY }}
