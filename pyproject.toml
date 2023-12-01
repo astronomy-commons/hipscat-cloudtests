@@ -17,6 +17,7 @@ dynamic = ["version"]
 dependencies = [
     # lsdb, hipscat, and hipscat-import are built from source via requirements.txt
     "adlfs",
+    "shortuuid",
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)

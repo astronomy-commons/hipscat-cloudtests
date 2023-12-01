@@ -7,6 +7,8 @@ from hipscat.catalog import Catalog, PartitionInfo
 from hipscat.io.file_io import file_io
 from hipscat.pixel_math import HealpixPixel
 
+from hipscat_cloudtests import TempCloudDirectory
+
 
 def test_load_catalog_small_sky(small_sky_dir_cloud, example_cloud_storage_options):
     """Instantiate a catalog with 1 pixel"""
@@ -18,11 +20,11 @@ def test_load_catalog_small_sky(small_sky_dir_cloud, example_cloud_storage_optio
 
 def test_empty_directory(tmp_dir_cloud, example_cloud_storage_options):
     """Test loading empty or incomplete data"""
-    catalog_path = os.path.join(tmp_dir_cloud, "empty")
+    with TempCloudDirectory(tmp_dir_cloud, "empty", example_cloud_storage_options) as temp_path:
+        catalog_path = temp_path
 
-    try:
-        ## Path exists but there's nothing there
-        with pytest.raises(FileNotFoundError, match="catalog info"):
+        ## Path exists but there's nothing there (which means it doesn't exist!)
+        with pytest.raises(FileNotFoundError, match="No directory"):
             Catalog.read_from_hipscat(catalog_path, storage_options=example_cloud_storage_options)
 
         ## catalog_info file exists - getting closer
@@ -45,16 +47,3 @@ def test_empty_directory(tmp_dir_cloud, example_cloud_storage_options):
 
         catalog = Catalog.read_from_hipscat(catalog_path, storage_options=example_cloud_storage_options)
         assert catalog.catalog_name == "empty"
-    finally:
-        file_io.delete_file(
-            os.path.join(catalog_path, "catalog_info.json"),
-            storage_options=example_cloud_storage_options,
-        )
-        file_io.delete_file(
-            os.path.join(catalog_path, "_metadata"),
-            storage_options=example_cloud_storage_options,
-        )
-        file_io.delete_file(
-            os.path.join(catalog_path, "_common_metadata"),
-            storage_options=example_cloud_storage_options,
-        )

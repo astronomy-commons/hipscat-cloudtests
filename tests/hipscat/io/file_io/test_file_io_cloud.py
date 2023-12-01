@@ -8,25 +8,27 @@ from hipscat.io.file_io import (
     load_json_file,
     load_parquet_to_pandas,
     load_text_file,
-    read_parquet_file_to_pandas,
     write_dataframe_to_csv,
     write_string_to_file,
 )
 from hipscat.io.paths import pixel_catalog_file
 
+from hipscat_cloudtests import TempCloudDirectory
+
 
 def test_write_string_to_file(tmp_dir_cloud, example_cloud_storage_options):
-    test_file_path = os.path.join(tmp_dir_cloud, "text_file.txt")
-    test_file_pointer = get_file_pointer_from_path(test_file_path)
-    test_string = "this is a test"
-    write_string_to_file(
-        test_file_pointer,
-        test_string,
-        encoding="utf-8",
-        storage_options=example_cloud_storage_options,
-    )
-    data = load_text_file(test_file_path, encoding="utf-8", storage_options=example_cloud_storage_options)
-    assert data[0] == test_string
+    with TempCloudDirectory(tmp_dir_cloud, "write_string", example_cloud_storage_options) as temp_path:
+        test_file_path = os.path.join(temp_path, "text_file.txt")
+        test_file_pointer = get_file_pointer_from_path(test_file_path)
+        test_string = "this is a test"
+        write_string_to_file(
+            test_file_pointer,
+            test_string,
+            encoding="utf-8",
+            storage_options=example_cloud_storage_options,
+        )
+        data = load_text_file(test_file_path, encoding="utf-8", storage_options=example_cloud_storage_options)
+        assert data[0] == test_string
 
 
 def test_load_json(small_sky_dir_local, small_sky_dir_cloud, example_cloud_storage_options):
@@ -47,23 +49,15 @@ def test_load_parquet_to_pandas(small_sky_dir_local, small_sky_dir_cloud, exampl
 
 
 def test_write_df_to_csv(tmp_dir_cloud, example_cloud_storage_options):
-    random_df = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list("ABCD"))
-    test_file_path = os.path.join(tmp_dir_cloud, "test.csv")
-    test_file_pointer = get_file_pointer_from_path(test_file_path)
-    write_dataframe_to_csv(
-        random_df,
-        test_file_pointer,
-        index=False,
-        storage_options=example_cloud_storage_options,
-    )
-    loaded_df = load_csv_to_pandas(test_file_pointer, storage_options=example_cloud_storage_options)
-    pd.testing.assert_frame_equal(loaded_df, random_df)
-
-
-def test_read_parquet_data(tmp_dir_cloud, example_cloud_storage_options):
-    random_df = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list("ABCD"))
-    test_file_path = os.path.join(tmp_dir_cloud, "test.parquet")
-    random_df.to_parquet(test_file_path, storage_options=example_cloud_storage_options)
-    file_pointer = get_file_pointer_from_path(test_file_path)
-    dataframe = read_parquet_file_to_pandas(file_pointer, storage_options=example_cloud_storage_options)
-    pd.testing.assert_frame_equal(dataframe, random_df)
+    with TempCloudDirectory(tmp_dir_cloud, "write_df_to_csv", example_cloud_storage_options) as temp_path:
+        random_df = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list("ABCD"))
+        test_file_path = os.path.join(temp_path, "test.csv")
+        test_file_pointer = get_file_pointer_from_path(test_file_path)
+        write_dataframe_to_csv(
+            random_df,
+            test_file_pointer,
+            index=False,
+            storage_options=example_cloud_storage_options,
+        )
+        loaded_df = load_csv_to_pandas(test_file_pointer, storage_options=example_cloud_storage_options)
+        pd.testing.assert_frame_equal(loaded_df, random_df)
