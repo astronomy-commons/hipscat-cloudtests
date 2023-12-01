@@ -10,14 +10,14 @@ from hipscat.io.file_io import file_io
 class TempCloudDirectory:
     """Simple context manager that creates a unique temporary directory
     path for a single testing context.
-    
+
     On exit, we will recursively remove the created directory."""
 
     def __init__(self, prefix_path, method_name="", storage_options: dict = None):
-        """Create a new context manager. 
-        
+        """Create a new context manager.
+
         This will NOT create the new temp path - that happens when we enter the context.
-        
+
         Args:
             prefix_path (str): base path to the cloud resource
             method_name (str): optional token to indicate the method under test
@@ -26,11 +26,11 @@ class TempCloudDirectory:
         self.prefix_path = prefix_path
         self.method_name = method_name
         self.storage_options = storage_options
-        self.temp_path=""
+        self.temp_path = ""
 
     def __enter__(self):
         """Create a new temporary path
-        
+
         Returns:
             string path that's been created. it will take the form of
             <prefix_path>/<method_name><some random string>
@@ -42,7 +42,4 @@ class TempCloudDirectory:
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Recursively delete the created resources."""
         if self.temp_path:
-            file_io.remove_directory(
-                self.temp_path,
-                storage_options=self.storage_options,
-            )
+            file_io.remove_directory(self.temp_path, ignore_errors=True, storage_options=self.storage_options)
