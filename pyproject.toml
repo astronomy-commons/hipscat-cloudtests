@@ -1,0 +1,45 @@
+[project]
+name = "hipscat_cloudtests"
+license = {file = "LICENSE"}
+readme = "README.md"
+authors = [
+    { name = "LINCC Frameworks", email = "lincc-frameworks-team@lists.lsst.org" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: BSD License",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+dynamic = ["version"]
+dependencies = [
+    # lsdb, hipscat, and hipscat-import are built from source via requirements.txt
+    "adlfs",
+    "shortuuid",
+]
+
+# On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit", # Used to run checks before finalizing a git commit
+    "pylint", # Used for static linting of files
+    "asv==0.6.1", # Used to compute performance benchmarks
+]
+
+[build-system]
+requires = [
+    "setuptools>=62", # Used to build and package the Python project
+    "setuptools_scm>=6.2", # Gets release version from git. Makes it available programmatically
+]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 110
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 110
