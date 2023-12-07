@@ -2,6 +2,7 @@
 to some unit test execution."""
 
 import os
+import time
 
 import shortuuid
 from hipscat.io.file_io import file_io
@@ -40,6 +41,21 @@ class TempCloudDirectory:
         return self.temp_path
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """Recursively delete the created resources."""
+        """Recursively delete the created resources.
+
+        This will try to delete 3 times, with exponential backoff.
+        We give up after the third attempt."""
+        sleep_time = 2
         if self.temp_path:
-            file_io.remove_directory(self.temp_path, ignore_errors=True, storage_options=self.storage_options)
+            for attempt_number in range(3):
+                ## Try
+                try:
+                    file_io.remove_directory(self.temp_path, storage_options=self.storage_options)
+                    return
+                except RuntimeError:
+                    if attempt_number == 2:
+                        print(f"Failed to remove directory {self.temp_path}. Giving up.")
+                        return
+                print(f"Failed to remove directory {self.temp_path}. Trying again.")
+                time.sleep(sleep_time)
+                sleep_time *= 2
