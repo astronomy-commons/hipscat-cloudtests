@@ -41,6 +41,11 @@ def example_cloud_storage_options(cloud):
 
 
 @pytest.fixture
-def small_sky_dir_local():
-    cloud_test_path = os.path.dirname(__file__)
-    return os.path.join(cloud_test_path, "data", SMALL_SKY_DIR_NAME)
+def local_data_dir():
+    local_data_path = os.path.dirname(__file__)
+    return os.path.join(local_data_path, "data")
+
+
+@pytest.fixture
+def small_sky_dir_local(local_data_dir):
+    return os.path.join(local_data_dir, SMALL_SKY_DIR_NAME)

@@ -43,3 +43,8 @@ target-version = ["py38"]
 [tool.isort]
 profile = "black"
 line_length = 110
+
+[tool.pytest.ini_options]
+markers = [
+    "dask: mark tests as having a dask client runtime dependency",
+]
