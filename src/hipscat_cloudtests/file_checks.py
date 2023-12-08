@@ -50,6 +50,9 @@ def assert_parquet_file_ids(
         file_name (str): fully-specified path of the file to read
         id_column (str): column in the parquet file to read IDs from
         expected_ids (:obj:`int[]`): list of expected ids in `id_column`
+        resort_ids (bool): should we re-sort the ids? if False, we will check that the ordering
+            is the same between the read IDs and expected_ids
+        storage_options (dict): dictionary of filesystem storage options
     """
     data_frame = pd.read_parquet(file_name, engine="pyarrow", storage_options=storage_options)
     assert id_column in data_frame.columns

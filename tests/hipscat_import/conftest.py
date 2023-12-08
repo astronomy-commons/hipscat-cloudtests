@@ -20,7 +20,7 @@ def pytest_collection_modifyitems(items):
     """Modify dask unit tests to
         - ignore event loop deprecation warnings
         - have a longer timeout default timeout (5 seconds instead of 1 second)
-        - require use of the `dask_client` fixture, even if it's not requsted
+        - require use of the `dask_client` fixture, even if it's not requested
 
     Individual tests that will be particularly long-running can still override
     the default timeout, by using an annotation like:

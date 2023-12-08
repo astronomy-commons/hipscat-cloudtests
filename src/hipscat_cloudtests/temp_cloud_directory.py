@@ -37,7 +37,7 @@ class TempCloudDirectory:
             <prefix_path>/<method_name><some random string>
         """
         my_uuid = shortuuid.uuid()
-        self.temp_path = os.path.join(self.prefix_path, f"{self.method_name}{my_uuid}")
+        self.temp_path = os.path.join(self.prefix_path, f"{self.method_name}-{my_uuid}")
         return self.temp_path
 
     def __exit__(self, exc_type, exc_val, exc_tb):
