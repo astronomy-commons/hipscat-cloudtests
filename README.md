@@ -44,6 +44,14 @@ Then to run the tests:
 pytest --cloud abfs
 ```
 
+Alternatively, you can add the environment variables to your conda environment, and reactivate:
+
+```
+(condaenv)$ conda env config vars set ABFS_LINCCDATA_ACCOUNT_NAME=lincc_account_name
+(condaenv)$ conda env config vars set ABFS_LINCCDATA_ACCOUNT_KEY=lincc_account_key
+(condaenv)$ conda activate condaenv
+```
+
 ### How are we connecting to the cloud resources?
 
 We have abstracted our entire i/o infrastructure to be read through the python 
@@ -94,7 +102,7 @@ def example_cloud_storage_options(cloud):
 
 3. Finally, you will need to copy several `/tests/data/` directories into your newly 
    created bucket. This can be accomplished by running the `copy_data_to_fs.py` script.
-4. Before running the tests, you will need to export your `valid_storage_option_param` into the environment.
+4. Before running the tests, you will need to export your `valid_storage_option_param`s  into the environment.
 
 
 ## Adding tests to the github workflows
