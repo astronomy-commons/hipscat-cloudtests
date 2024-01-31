@@ -1,9 +1,9 @@
-# hipscat_cloudtests
+# hipscat cloudtests
 
 [![Template](https://img.shields.io/badge/Template-LINCC%20Frameworks%20Python%20Project%20Template-brightgreen)](https://lincc-ppt.readthedocs.io/en/latest/)
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat_cloudtests/smoke-test.yml)](https://github.com/astronomy-commons/hipscat_cloudtests/actions/workflows/smoke-test.yml)
-[![benchmarks](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat_cloudtests/asv-main.yml?label=benchmarks)](https://astronomy-commons.github.io/hipscat_cloudtests/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat-cloudtests/smoke-test.yml)](https://github.com/astronomy-commons/hipscat-cloudtests/actions/workflows/smoke-test.yml)
+[![benchmarks](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat-cloudtests/asv-main.yml?label=benchmarks)](https://astronomy-commons.github.io/hipscat-cloudtests/)
 
 Integration tests for cloud read and write through HiPScat and LSDB libraries.
 
