@@ -27,7 +27,7 @@ def test_catalog_import_write_to_cloud(
             output_artifact_name="small_sky_object_catalog",
             input_path=small_sky_parts_dir_local,
             output_storage_options=example_cloud_storage_options,
-            input_format="csv",
+            file_reader="csv",
             output_path=temp_path,
             dask_tmp=tmp_path,
             highest_healpix_order=1,
@@ -67,7 +67,6 @@ def test_catalog_import_read_from_cloud(
         output_artifact_name="small_sky_object_catalog",
         input_path=small_sky_parts_dir_cloud,
         input_storage_options=example_cloud_storage_options,
-        input_format="csv",
         file_reader=CsvReader(
             storage_options=example_cloud_storage_options,
         ),
