@@ -45,5 +45,6 @@ def test_empty_directory(tmp_dir_cloud, example_cloud_storage_options):
             catalog_path=catalog_path, storage_options=example_cloud_storage_options
         )
 
-        catalog = Catalog.read_from_hipscat(catalog_path, storage_options=example_cloud_storage_options)
+        with pytest.warns(UserWarning, match="slow"):
+            catalog = Catalog.read_from_hipscat(catalog_path, storage_options=example_cloud_storage_options)
         assert catalog.catalog_name == "empty"
