@@ -9,8 +9,6 @@ SMALL_SKY_DIR_NAME = "small_sky"
 SMALL_SKY_XMATCH_NAME = "small_sky_xmatch"
 SMALL_SKY_ORDER1_DIR_NAME = "small_sky_order1"
 XMATCH_CORRECT_FILE = "xmatch_correct.csv"
-XMATCH_CORRECT_005_FILE = "xmatch_correct_0_005.csv"
-XMATCH_MOCK_FILE = "xmatch_mock.csv"
 
 
 @pytest.fixture
@@ -56,6 +54,6 @@ def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, example_cloud_sto
 
 
 @pytest.fixture
-def xmatch_correct_cloud(small_sky_xmatch_dir_cloud, example_cloud_storage_options):
-    pathway = os.path.join(small_sky_xmatch_dir_cloud, XMATCH_CORRECT_FILE)
-    return file_io.load_csv_to_pandas(pathway, storage_options=example_cloud_storage_options)
+def xmatch_correct_cloud(local_data_dir):
+    pathway = os.path.join(local_data_dir, "xmatch", XMATCH_CORRECT_FILE)
+    return file_io.load_csv_to_pandas(pathway)
