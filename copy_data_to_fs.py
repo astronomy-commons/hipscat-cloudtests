@@ -76,12 +76,11 @@ def copy_dir(
 
 
 if __name__ == "__main__":
-
     source_pw = f"{os.getcwd()}/../tests/data"
     target_pw = "abfs://hipscat/pytests/lsdb"
 
     target_so = {
-        "account_name": "linccdata",
-        "account_key": "ezBADSIGArKcI0JNHFdRfLF5S/64ZJcdrbXKbK5GJikF+YAC0hDAhMputN59HA4RS4N3HmjNZgdc+AStBFuQ6Q==",
+        "account_key": os.environ.get("ABFS_LINCCDATA_ACCOUNT_KEY"),
+        "account_name": os.environ.get("ABFS_LINCCDATA_ACCOUNT_NAME"),
     }
     copy_tree_fs_to_fs(source_pw, target_pw, {}, target_so, verbose=True)
