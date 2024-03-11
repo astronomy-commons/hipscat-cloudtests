@@ -14,19 +14,25 @@ classifiers = [
     "Programming Language :: Python",
 ]
 dynamic = ["version"]
+requires-python = ">=3.9"
 dependencies = [
     # lsdb, hipscat, and hipscat-import are built from source via requirements.txt
     "adlfs",
     "shortuuid",
 ]
 
+[project.urls]
+"Source Code" = "https://github.com/astronomy-commons/hipscat_cloudtests"
+
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
 [project.optional-dependencies]
 dev = [
-    "pytest",
+    "asv==0.6.1", # Used to compute performance benchmarks
+    "black", # Used for static linting of files
     "pre-commit", # Used to run checks before finalizing a git commit
     "pylint", # Used for static linting of files
-    "asv==0.6.1", # Used to compute performance benchmarks
+    "pytest",
+    "pytest-cov", # Used to report total code coverage
 ]
 
 [build-system]
@@ -36,15 +42,62 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.pytest.ini_options]
+markers = [
+    "dask: mark tests as having a dask client runtime dependency",
+]
 [tool.black]
 line-length = 110
-target-version = ["py38"]
+target-version = ["py39"]
 
 [tool.isort]
 profile = "black"
 line_length = 110
 
-[tool.pytest.ini_options]
-markers = [
-    "dask: mark tests as having a dask client runtime dependency",
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    "W",
+    # Pyflakes
+    "F",
+    # pep8-naming
+    "N",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # docstrings
+    "D101",
+    "D102",
+    "D103",
+    "D106",
+    "D206",
+    "D207",
+    "D208",
+    "D300",
+    "D417",
+    "D419",
+
 ]
+
+ignore = [
+    "UP006", # Allow non standard library generics in type hints
+    "UP007", # Allow Union in type hints
+    "SIM114", # Allow if with same arms
+    "B028", # Allow default warning level
+    "SIM117", # Allow nested with
+    "UP015", # Allow redundant open parameters
+    "UP028", # Allow yield in for loop
+]
+
+[tool.coverage.run]
+omit=["src/hipscat_cloudtests/_version.py"]
