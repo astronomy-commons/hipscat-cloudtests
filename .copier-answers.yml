@@ -1,17 +1,24 @@
 # Changes here will be overwritten by Copier
-_commit: v1.4.5
+_commit: v2.0.0
 _src_path: gh:lincc-frameworks/python-project-template
 author_email: lincc-frameworks-team@lists.lsst.org
 author_name: LINCC Frameworks
-create_example_module: true
+create_example_module: false
 custom_install: true
+enforce_style:
+- pylint
+- black
+- isort
+failure_notification:
+- slack
 include_benchmarks: true
 include_docs: false
 mypy_type_checking: none
 package_name: hipscat_cloudtests
-preferred_linter: pylint
 project_license: BSD
 project_name: hipscat_cloudtests
 project_organization: astronomy-commons
-use_gitlfs: none
-use_isort: true
+python_versions:
+- '3.9'
+- '3.10'
+- '3.11'
