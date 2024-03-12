@@ -24,6 +24,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "pytest-mock", # Used to mock objects in tests
     "pre-commit", # Used to run checks before finalizing a git commit
     "pylint", # Used for static linting of files
     "asv==0.6.1", # Used to compute performance benchmarks
