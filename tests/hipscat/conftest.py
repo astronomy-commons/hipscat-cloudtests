@@ -3,7 +3,6 @@ import os.path
 
 import pytest
 
-
 # pylint: disable=missing-function-docstring, redefined-outer-name
 
 
