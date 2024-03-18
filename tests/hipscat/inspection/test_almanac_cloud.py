@@ -14,7 +14,7 @@ def test_default(almanac_dir_cloud, test_data_dir_cloud, example_cloud_storage_o
 
     os.environ["HIPSCAT_ALMANAC_DIR"] = almanac_dir_cloud
     alms = Almanac(include_default_dir=True, storage_options=example_cloud_storage_options)
-    assert len(alms.catalogs()) == 8
+    assert len(alms.catalogs()) == 2
 
     os.environ.pop("HIPSCAT_ALMANAC_DIR")
     alms = Almanac(include_default_dir=True, storage_options=example_cloud_storage_options)
