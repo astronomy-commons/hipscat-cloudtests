@@ -5,9 +5,7 @@ import lsdb
 import pytest
 from hipscat.io.file_io import file_io
 
-SMALL_SKY_DIR_NAME = "small_sky"
 SMALL_SKY_XMATCH_NAME = "small_sky_xmatch"
-SMALL_SKY_ORDER1_DIR_NAME = "small_sky_order1"
 XMATCH_CORRECT_FILE = "xmatch_correct.csv"
 
 
@@ -17,18 +15,8 @@ def test_data_dir_cloud(example_cloud_path):
 
 
 @pytest.fixture
-def small_sky_dir_cloud(test_data_dir_cloud):
-    return os.path.join(test_data_dir_cloud, SMALL_SKY_DIR_NAME)
-
-
-@pytest.fixture
 def small_sky_xmatch_dir_cloud(test_data_dir_cloud):
     return os.path.join(test_data_dir_cloud, SMALL_SKY_XMATCH_NAME)
-
-
-@pytest.fixture
-def small_sky_order1_dir_cloud(test_data_dir_cloud):
-    return os.path.join(test_data_dir_cloud, SMALL_SKY_ORDER1_DIR_NAME)
 
 
 @pytest.fixture

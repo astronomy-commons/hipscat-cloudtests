@@ -46,7 +46,7 @@ def test_find_files_matching_path(small_sky_dir_cloud, example_cloud_storage_opt
         == 1
     )
 
-    ## wilcard in the name
+    ## wilcard in the name, matches catalog_info.json and provenance_info.json
     assert (
         len(
             find_files_matching_path(
@@ -55,7 +55,7 @@ def test_find_files_matching_path(small_sky_dir_cloud, example_cloud_storage_opt
                 storage_options=example_cloud_storage_options,
             )
         )
-        == 1
+        == 2
     )
 
 
@@ -101,7 +101,9 @@ def test_get_directory_contents(small_sky_order1_dir_cloud, example_cloud_storag
         "_common_metadata",
         "_metadata",
         "catalog_info.json",
+        "partition_info.csv",
         "point_map.fits",
+        "provenance_info.json",
     ]
 
     expected = [os.path.join(small_sky_order1_dir_cloud, file_name) for file_name in expected]
