@@ -10,13 +10,8 @@ XMATCH_CORRECT_FILE = "xmatch_correct.csv"
 
 
 @pytest.fixture
-def test_data_dir_cloud(example_cloud_path):
-    return os.path.join(example_cloud_path, "lsdb", "data")
-
-
-@pytest.fixture
-def small_sky_xmatch_dir_cloud(test_data_dir_cloud):
-    return os.path.join(test_data_dir_cloud, SMALL_SKY_XMATCH_NAME)
+def small_sky_xmatch_dir_cloud(example_cloud_path):
+    return os.path.join(example_cloud_path, "data", SMALL_SKY_XMATCH_NAME)
 
 
 @pytest.fixture

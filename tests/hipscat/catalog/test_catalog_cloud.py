@@ -7,7 +7,7 @@ from hipscat.catalog import Catalog, PartitionInfo
 from hipscat.io.file_io import file_io
 from hipscat.io.validation import is_valid_catalog
 from hipscat.pixel_math import HealpixPixel
-
+from hipscat.loaders import read_from_hipscat
 from hipscat_cloudtests import TempCloudDirectory
 
 
@@ -15,6 +15,17 @@ def test_load_catalog_small_sky(small_sky_dir_cloud, example_cloud_storage_optio
     """Instantiate a catalog with 1 pixel"""
     cat = Catalog.read_from_hipscat(small_sky_dir_cloud, storage_options=example_cloud_storage_options)
 
+    assert cat.catalog_name == "small_sky"
+    assert len(cat.get_healpix_pixels()) == 1
+
+    assert is_valid_catalog(small_sky_dir_cloud, storage_options=example_cloud_storage_options)
+
+
+def test_load_catalog_small_sky_with_loader(small_sky_dir_cloud, example_cloud_storage_options):
+    """Instantiate a catalog with 1 pixel"""
+    cat = read_from_hipscat(small_sky_dir_cloud, storage_options=example_cloud_storage_options)
+
+    assert isinstance(cat, Catalog)
     assert cat.catalog_name == "small_sky"
     assert len(cat.get_healpix_pixels()) == 1
 
