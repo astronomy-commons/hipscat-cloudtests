@@ -6,8 +6,9 @@ import pytest
 from hipscat.catalog import Catalog, PartitionInfo
 from hipscat.io.file_io import file_io
 from hipscat.io.validation import is_valid_catalog
-from hipscat.pixel_math import HealpixPixel
 from hipscat.loaders import read_from_hipscat
+from hipscat.pixel_math import HealpixPixel
+
 from hipscat_cloudtests import TempCloudDirectory
 
 

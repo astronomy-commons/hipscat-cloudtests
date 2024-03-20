@@ -1,5 +1,5 @@
-import pytest
 import lsdb
+import pytest
 from lsdb.core.crossmatch.kdtree_match import KdTreeCrossmatch
 
 
@@ -20,7 +20,7 @@ def test_crossmatch_with_margin(
     small_sky_order1_dir_cloud,
     small_sky_xmatch_dir_cloud,
     small_sky_margin_dir_cloud,
-    xmatch_correct_cloud,
+    xmatch_with_margin,
     example_cloud_storage_options,
 ):
     small_sky_margin_catalog = lsdb.read_hipscat(
@@ -37,12 +37,12 @@ def test_crossmatch_with_margin(
     xmatched = small_sky_xmatch_catalog.crossmatch(
         small_sky_order1_catalog, n_neighbors=3, radius_arcsec=2 * 3600, algo=KdTreeCrossmatch
     ).compute()
-    assert len(xmatched) == len(xmatch_correct_cloud)
-    for _, correct_row in xmatch_correct_cloud.iterrows():
-        assert correct_row["ss_id"] in xmatched["id_small_sky"].values
+    assert len(xmatched) == len(xmatch_with_margin)
+    for _, correct_row in xmatch_with_margin.iterrows():
+        assert correct_row["small_sky_order1_id"] in xmatched["id_small_sky_order1"].values
         xmatch_row = xmatched[
-            (xmatched["id_small_sky"] == correct_row["ss_id"])
+            (xmatched["id_small_sky_order1"] == correct_row["small_sky_order1_id"])
             & (xmatched["id_small_sky_xmatch"] == correct_row["xmatch_id"])
         ]
         assert len(xmatch_row) == 1
-        assert xmatch_row["_dist_arcsec"].values == pytest.approx(correct_row["dist"] * 3600)
+        assert xmatch_row["_dist_arcsec"].values == pytest.approx(correct_row["dist_arcsec"])

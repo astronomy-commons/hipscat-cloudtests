@@ -1,15 +1,12 @@
 import os
 
-import pyarrow as pa
-import pyarrow.parquet as pq
+import hipscat_import.soap.run_soap as runner
 import pytest
 from hipscat.catalog.association_catalog.association_catalog import AssociationCatalog
-
-import hipscat_import.soap.run_soap as runner
+from hipscat.io.file_io import read_parquet_metadata
 from hipscat_import.soap.arguments import SoapArguments
 
-from hipscat_cloudtests import TempCloudDirectory, assert_text_file_matches
-from hipscat.io.file_io import read_parquet_metadata
+from hipscat_cloudtests import TempCloudDirectory
 
 
 @pytest.mark.dask

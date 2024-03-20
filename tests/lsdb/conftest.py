@@ -40,3 +40,9 @@ def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, example_cloud_sto
 def xmatch_correct_cloud(local_data_dir):
     pathway = os.path.join(local_data_dir, "xmatch", XMATCH_CORRECT_FILE)
     return file_io.load_csv_to_pandas(pathway)
+
+
+@pytest.fixture
+def xmatch_with_margin(local_data_dir):
+    pathway = os.path.join(local_data_dir, "xmatch", "xmatch_with_margin.csv")
+    return file_io.load_csv_to_pandas(pathway)

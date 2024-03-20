@@ -1,5 +1,4 @@
 import numpy.testing as npt
-
 from hipscat.catalog.index.index_catalog import IndexCatalog
 from hipscat.loaders import read_from_hipscat
 from hipscat.pixel_math import HealpixPixel
