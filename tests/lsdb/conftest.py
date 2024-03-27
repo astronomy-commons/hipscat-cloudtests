@@ -9,6 +9,7 @@ SMALL_SKY_XMATCH_NAME = "small_sky_xmatch"
 XMATCH_CORRECT_FILE = "xmatch_correct.csv"
 
 
+@pytest.fixture
 def small_sky_xmatch_dir_cloud(example_cloud_path):
     return os.path.join(example_cloud_path, "data", SMALL_SKY_XMATCH_NAME)
 
