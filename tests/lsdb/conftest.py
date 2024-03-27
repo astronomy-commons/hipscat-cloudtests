@@ -10,13 +10,8 @@ XMATCH_CORRECT_FILE = "xmatch_correct.csv"
 
 
 @pytest.fixture
-def test_data_dir_cloud(example_cloud_path):
-    return os.path.join(example_cloud_path, "lsdb", "data")
-
-
-@pytest.fixture
-def small_sky_xmatch_dir_cloud(test_data_dir_cloud):
-    return os.path.join(test_data_dir_cloud, SMALL_SKY_XMATCH_NAME)
+def small_sky_xmatch_dir_cloud(example_cloud_path):
+    return os.path.join(example_cloud_path, "data", SMALL_SKY_XMATCH_NAME)
 
 
 @pytest.fixture
@@ -44,4 +39,10 @@ def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, example_cloud_sto
 @pytest.fixture
 def xmatch_correct_cloud(local_data_dir):
     pathway = os.path.join(local_data_dir, "xmatch", XMATCH_CORRECT_FILE)
+    return file_io.load_csv_to_pandas(pathway)
+
+
+@pytest.fixture
+def xmatch_with_margin(local_data_dir):
+    pathway = os.path.join(local_data_dir, "xmatch", "xmatch_with_margin.csv")
     return file_io.load_csv_to_pandas(pathway)
