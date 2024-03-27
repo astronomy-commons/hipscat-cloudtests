@@ -59,7 +59,6 @@ def small_sky_order1_dir_local(local_data_dir):
     return os.path.join(local_data_dir, SMALL_SKY_ORDER1_DIR_NAME)
 
 
-@pytest.fixture
 def tmp_dir_cloud(example_cloud_path):
     return os.path.join(example_cloud_path, "tmp")
 
@@ -69,7 +68,6 @@ def test_data_dir_cloud(example_cloud_path):
     return os.path.join(example_cloud_path, "data")
 
 
-@pytest.fixture
 def almanac_dir_cloud(example_cloud_path):
     return os.path.join(example_cloud_path, "data", ALMANAC_DIR_NAME)
 
