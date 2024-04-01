@@ -60,6 +60,11 @@ def small_sky_order1_dir_local(local_data_dir):
 
 
 @pytest.fixture
+def small_sky_parts_dir_local(local_data_dir):
+    return os.path.join(local_data_dir, "small_sky_parts")
+
+
+@pytest.fixture
 def tmp_dir_cloud(example_cloud_path):
     return os.path.join(example_cloud_path, "tmp")
 
