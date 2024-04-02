@@ -62,7 +62,7 @@ There are various steps to have tests run on another cloud bucket provider (like
 ...
 #...line 38...
 @pytest.fixture
-def example_cloud_path(cloud):
+def cloud_path(cloud):
     if cloud == "abfs":
         return "abfs://hipscat/pytests/hipscat"
     
@@ -73,7 +73,7 @@ def example_cloud_path(cloud):
     raise NotImplementedError("Cloud format not implemented for hipscat tests!")
 
 @pytest.fixture
-def example_cloud_storage_options(cloud):
+def storage_options(cloud):
     if cloud == "abfs":
         storage_options = {
             "account_key" : os.environ.get("ABFS_LINCCDATA_ACCOUNT_KEY"),
