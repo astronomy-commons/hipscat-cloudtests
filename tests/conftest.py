@@ -3,11 +3,12 @@ import os
 import pytest
 import shortuuid
 
+from hipscat_cloudtests.temp_cloud_directory import TempCloudDirectory
+
 ALMANAC_DIR_NAME = "almanac"
 SMALL_SKY_DIR_NAME = "small_sky"
 SMALL_SKY_ORDER1_DIR_NAME = "small_sky_order1"
 
-from hipscat_cloudtests.temp_cloud_directory import TempCloudDirectory
 
 TEST_DIR = os.path.dirname(__file__)
 SMALL_SKY_DIR_NAME = "small_sky"

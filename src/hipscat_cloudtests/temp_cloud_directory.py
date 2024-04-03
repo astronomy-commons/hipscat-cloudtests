@@ -39,6 +39,12 @@ class TempCloudDirectory:
         return self.open()
 
     def open(self):
+        """Create a new temporary path
+
+        Returns:
+            string path that's been created. it will take the form of
+            <prefix_path>/<method_name><some random string>
+        """
         my_uuid = shortuuid.uuid()
         self.temp_path = os.path.join(self.prefix_path, f"{self.method_name}-{my_uuid}")
         return self.temp_path
@@ -50,16 +56,20 @@ class TempCloudDirectory:
         We give up after the third attempt."""
         self.close()
 
-    def close(self):
+    def close(self, num_retries=4):
+        """Recursively delete the created resources.
+
+        This will try to delete `num_retries` times, with exponential backoff.
+        We give up after the last attempt."""
         sleep_time = 2
         if self.temp_path:
-            for attempt_number in range(4):
+            for attempt_number in range(1, num_retries + 1):
                 ## Try
                 try:
                     file_io.remove_directory(self.temp_path, storage_options=self.storage_options)
                     return
                 except RuntimeError:
-                    if attempt_number == 3:
+                    if attempt_number == num_retries:
                         print(f"Failed to remove directory {self.temp_path}. Giving up.")
                         return
                 print(f"Failed to remove directory {self.temp_path}. Trying again.")
