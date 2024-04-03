@@ -97,7 +97,6 @@ def small_sky_margin_dir_cloud(cloud_path):
 @pytest.fixture(scope="session", name="tmp_dir_cloud")
 def tmp_dir_cloud(cloud_path, storage_options):
     """Create a single client for use by all unit test cases."""
-    # client = Client()
     tmp = TempCloudDirectory(
         os.path.join(cloud_path, "tmp"),
         method_name="full_test",
