@@ -10,30 +10,28 @@ XMATCH_CORRECT_FILE = "xmatch_correct.csv"
 
 
 @pytest.fixture
-def small_sky_xmatch_dir_cloud(example_cloud_path):
-    return os.path.join(example_cloud_path, "data", SMALL_SKY_XMATCH_NAME)
+def small_sky_xmatch_dir_cloud(cloud_path):
+    return os.path.join(cloud_path, "data", SMALL_SKY_XMATCH_NAME)
 
 
 @pytest.fixture
-def small_sky_catalog_cloud(small_sky_dir_cloud, example_cloud_storage_options):
-    return lsdb.read_hipscat(small_sky_dir_cloud, storage_options=example_cloud_storage_options)
+def small_sky_catalog_cloud(small_sky_dir_cloud, storage_options):
+    return lsdb.read_hipscat(small_sky_dir_cloud, storage_options=storage_options)
 
 
 @pytest.fixture
-def small_sky_xmatch_catalog_cloud(small_sky_xmatch_dir_cloud, example_cloud_storage_options):
-    return lsdb.read_hipscat(small_sky_xmatch_dir_cloud, storage_options=example_cloud_storage_options)
+def small_sky_xmatch_catalog_cloud(small_sky_xmatch_dir_cloud, storage_options):
+    return lsdb.read_hipscat(small_sky_xmatch_dir_cloud, storage_options=storage_options)
 
 
 @pytest.fixture
-def small_sky_order1_hipscat_catalog_cloud(small_sky_order1_dir_cloud, example_cloud_storage_options):
-    return hc.catalog.Catalog.read_from_hipscat(
-        small_sky_order1_dir_cloud, storage_options=example_cloud_storage_options
-    )
+def small_sky_order1_hipscat_catalog_cloud(small_sky_order1_dir_cloud, storage_options):
+    return hc.catalog.Catalog.read_from_hipscat(small_sky_order1_dir_cloud, storage_options=storage_options)
 
 
 @pytest.fixture
-def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, example_cloud_storage_options):
-    return lsdb.read_hipscat(small_sky_order1_dir_cloud, storage_options=example_cloud_storage_options)
+def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, storage_options):
+    return lsdb.read_hipscat(small_sky_order1_dir_cloud, storage_options=storage_options)
 
 
 @pytest.fixture

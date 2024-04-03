@@ -3,11 +3,8 @@ from hipscat.loaders import read_from_hipscat
 from hipscat.pixel_math.healpix_pixel import HealpixPixel
 
 
-def test_read_margin_from_file(
-    small_sky_margin_dir_cloud,
-    example_cloud_storage_options,
-):
-    catalog = read_from_hipscat(small_sky_margin_dir_cloud, storage_options=example_cloud_storage_options)
+def test_read_margin_from_file(small_sky_margin_dir_cloud, storage_options):
+    catalog = read_from_hipscat(small_sky_margin_dir_cloud, storage_options=storage_options)
 
     assert isinstance(catalog, MarginCatalog)
     assert catalog.on_disk

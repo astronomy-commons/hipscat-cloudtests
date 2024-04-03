@@ -6,9 +6,9 @@ from lsdb.catalog.margin_catalog import MarginCatalog
 def test_read_hipscat(
     small_sky_order1_dir_cloud,
     small_sky_order1_hipscat_catalog_cloud,
-    example_cloud_storage_options,
+    storage_options,
 ):
-    catalog = lsdb.read_hipscat(small_sky_order1_dir_cloud, storage_options=example_cloud_storage_options)
+    catalog = lsdb.read_hipscat(small_sky_order1_dir_cloud, storage_options=storage_options)
     assert isinstance(catalog, lsdb.Catalog)
     assert catalog.hc_structure.catalog_base_dir == small_sky_order1_hipscat_catalog_cloud.catalog_base_dir
     assert catalog.get_healpix_pixels() == small_sky_order1_hipscat_catalog_cloud.get_healpix_pixels()
@@ -19,9 +19,9 @@ def test_read_hipscat(
 
 def test_read_hipscat_margin(
     small_sky_margin_dir_cloud,
-    example_cloud_storage_options,
+    storage_options,
 ):
-    catalog = lsdb.read_hipscat(small_sky_margin_dir_cloud, storage_options=example_cloud_storage_options)
+    catalog = lsdb.read_hipscat(small_sky_margin_dir_cloud, storage_options=storage_options)
     assert isinstance(catalog, MarginCatalog)
     assert catalog.hc_structure.catalog_base_dir == small_sky_margin_dir_cloud
     assert catalog.get_healpix_pixels() == [
