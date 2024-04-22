@@ -24,7 +24,6 @@ def test_run_index(
         output_storage_options=storage_options,
         tmp_dir=tmp_path,
         dask_tmp=tmp_path,
-        overwrite=True,
         progress_bar=False,
     )
     runner.run(args, dask_client)
@@ -75,7 +74,6 @@ def test_run_index_read_from_cloud(
         output_artifact_name="small_sky_object_index",
         tmp_dir=tmp_path,
         dask_tmp=tmp_path,
-        overwrite=True,
         progress_bar=False,
     )
     runner.run(args, dask_client)
