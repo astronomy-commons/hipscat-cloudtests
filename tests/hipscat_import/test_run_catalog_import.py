@@ -29,7 +29,6 @@ def test_catalog_import_write_to_cloud(
         dask_tmp=tmp_path,
         highest_healpix_order=1,
         progress_bar=False,
-        overwrite=True,
     )
 
     runner.run(args, dask_client)
