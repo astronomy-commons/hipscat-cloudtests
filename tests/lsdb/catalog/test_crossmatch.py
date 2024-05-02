@@ -1,6 +1,5 @@
 import lsdb
 import pytest
-from lsdb.core.crossmatch.kdtree_match import KdTreeCrossmatch
 
 
 def test_kdtree_crossmatch(small_sky_catalog_cloud, small_sky_xmatch_catalog_cloud, xmatch_correct_cloud):
@@ -31,7 +30,7 @@ def test_crossmatch_with_margin(
     )
     small_sky_xmatch_catalog = lsdb.read_hipscat(small_sky_xmatch_dir_cloud, storage_options=storage_options)
     xmatched = small_sky_xmatch_catalog.crossmatch(
-        small_sky_order1_catalog, n_neighbors=3, radius_arcsec=2 * 3600, algo=KdTreeCrossmatch
+        small_sky_order1_catalog, n_neighbors=3, radius_arcsec=2 * 3600
     ).compute()
     assert len(xmatched) == len(xmatch_with_margin)
     for _, correct_row in xmatch_with_margin.iterrows():
