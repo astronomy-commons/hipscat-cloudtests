@@ -3,9 +3,9 @@ import pytest
 
 
 def test_kdtree_crossmatch(small_sky_catalog_cloud, small_sky_xmatch_catalog_cloud, xmatch_correct_cloud):
-    with pytest.warns(RuntimeWarning, match="Results may be inaccurate"):
+    with pytest.warns(RuntimeWarning, match="Results may be incomplete"):
         xmatched = small_sky_catalog_cloud.crossmatch(
-            small_sky_xmatch_catalog_cloud, radius_arcsec=0.01 * 3600, require_right_margin=False
+            small_sky_xmatch_catalog_cloud, radius_arcsec=0.01 * 3600
         ).compute()
     assert len(xmatched) == len(xmatch_correct_cloud)
     for _, correct_row in xmatch_correct_cloud.iterrows():
