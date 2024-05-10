@@ -9,10 +9,10 @@ def test_kdtree_crossmatch(small_sky_catalog_cloud, small_sky_xmatch_catalog_clo
         ).compute()
     assert len(xmatched) == len(xmatch_correct_cloud)
     for _, correct_row in xmatch_correct_cloud.iterrows():
-        assert correct_row["small_sky_id"] in xmatched["id_small_sky"].values
+        assert correct_row["small_sky_id"] in xmatched["id_small_sky"].to_numpy()
         xmatch_row = xmatched[xmatched["id_small_sky"] == correct_row["small_sky_id"]]
-        assert xmatch_row["id_small_sky_xmatch"].values == correct_row["xmatch_id"]
-        assert xmatch_row["_dist_arcsec"].values == pytest.approx(correct_row["dist_arcsec"])
+        assert xmatch_row["id_small_sky_xmatch"].to_numpy() == correct_row["xmatch_id"]
+        assert xmatch_row["_dist_arcsec"].to_numpy() == pytest.approx(correct_row["dist_arcsec"])
 
 
 def test_crossmatch_with_margin(
@@ -34,10 +34,10 @@ def test_crossmatch_with_margin(
     ).compute()
     assert len(xmatched) == len(xmatch_with_margin)
     for _, correct_row in xmatch_with_margin.iterrows():
-        assert correct_row["small_sky_order1_id"] in xmatched["id_small_sky_order1"].values
+        assert correct_row["small_sky_order1_id"] in xmatched["id_small_sky_order1"].to_numpy()
         xmatch_row = xmatched[
             (xmatched["id_small_sky_order1"] == correct_row["small_sky_order1_id"])
             & (xmatched["id_small_sky_xmatch"] == correct_row["xmatch_id"])
         ]
         assert len(xmatch_row) == 1
-        assert xmatch_row["_dist_arcsec"].values == pytest.approx(correct_row["dist_arcsec"])
+        assert xmatch_row["_dist_arcsec"].to_numpy() == pytest.approx(correct_row["dist_arcsec"])
