@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import hipscat as hc
 import lsdb
@@ -52,7 +53,7 @@ def storage_options(cloud):
 @pytest.fixture
 def local_data_dir():
     local_data_path = os.path.dirname(__file__)
-    return os.path.join(local_data_path, "data")
+    return Path(local_data_path) / "data"
 
 
 @pytest.fixture
