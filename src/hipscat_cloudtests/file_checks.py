@@ -4,6 +4,7 @@ import re
 
 import numpy.testing as npt
 import pandas as pd
+import pyarrow as pa
 from hipscat.io.file_io.file_io import load_text_file
 from hipscat.io.file_io.file_pointer import does_file_or_directory_exist
 
@@ -40,7 +41,7 @@ def assert_text_file_matches(expected_lines, file_name, storage_options: dict = 
 
 
 def assert_parquet_file_ids(
-    file_name, id_column, expected_ids, resort_ids=True, storage_options: dict = None
+    file_name, id_column, schema: pa.Schema, expected_ids, resort_ids=True, storage_options: dict = None
 ):
     """
     Convenience method to read a parquet file and compare the object IDs to
@@ -54,7 +55,7 @@ def assert_parquet_file_ids(
             is the same between the read IDs and expected_ids
         storage_options (dict): dictionary of filesystem storage options
     """
-    data_frame = pd.read_parquet(file_name, engine="pyarrow", storage_options=storage_options)
+    data_frame = pd.read_parquet(file_name, engine="pyarrow", schema=schema, storage_options=storage_options)
     assert id_column in data_frame.columns
     ids = data_frame[id_column].tolist()
     if resort_ids:

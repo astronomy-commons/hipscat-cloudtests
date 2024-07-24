@@ -46,7 +46,7 @@ def test_catalog_import_write_to_cloud(
     output_file = os.path.join(args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
 
     expected_ids = [*range(700, 831)]
-    assert_parquet_file_ids(output_file, "id", expected_ids, storage_options=storage_options)
+    assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids, storage_options=storage_options)
 
 
 @pytest.mark.dask
@@ -85,7 +85,7 @@ def test_catalog_import_read_from_cloud(
     output_file = os.path.join(args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
 
     expected_ids = [*range(700, 831)]
-    assert_parquet_file_ids(output_file, "id", expected_ids)
+    assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids)
 
 
 def test_read_csv_cloud(storage_options, small_sky_parts_dir_cloud):
