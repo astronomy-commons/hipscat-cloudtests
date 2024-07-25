@@ -6,9 +6,11 @@ import hipscat.io.write_metadata as io
 import hipscat.pixel_math as hist
 import numpy.testing as npt
 import pyarrow as pa
+import pyarrow.parquet as pq
 import pytest
 from hipscat.catalog.catalog_info import CatalogInfo
 from hipscat.io import file_io
+from hipscat.io.file_io.file_io import get_fs
 from hipscat.io.parquet_metadata import write_parquet_metadata
 
 from hipscat_cloudtests import assert_text_file_matches
@@ -175,7 +177,8 @@ def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, 
 
     assert schema.equals(expected_schema, check_metadata=False)
 
-    parquet_file = file_io.read_parquet_file(file_pointer=file_name, storage_options=storage_options)
+    file_system, file_pointer = get_fs(file_name, storage_options=storage_options)
+    parquet_file = pq.ParquetFile(file_pointer, filesystem=file_system)
     assert parquet_file.metadata.num_row_groups == expected_num_row_groups
 
     for row_index in range(0, parquet_file.metadata.num_row_groups):
