@@ -5,6 +5,7 @@ import hipscat as hc
 import lsdb
 import pytest
 import shortuuid
+from fsspec.implementations.dirfs import DirFileSystem
 from hipscat.io.file_io import file_io
 
 from hipscat_cloudtests.temp_cloud_directory import TempCloudDirectory
@@ -22,7 +23,7 @@ SMALL_SKY_DIR_NAME = "small_sky"
 
 
 def pytest_addoption(parser):
-    parser.addoption("--cloud", action="store", default="abfs")
+    parser.addoption("--cloud", action="store", default="dirfs")
 
 
 @pytest.fixture(scope="session", name="cloud")
@@ -34,6 +35,8 @@ def cloud(request):
 def cloud_path(cloud):
     if cloud == "abfs":
         return "abfs://hipscat/pytests/"
+    elif cloud == "dirfs":
+        return ""
 
     raise NotImplementedError("Cloud format not implemented for tests!")
 
@@ -46,6 +49,18 @@ def storage_options(cloud):
             "account_name": os.environ.get("ABFS_LINCCDATA_ACCOUNT_NAME"),
         }
         return storage_options
+    elif cloud == "dirfs":
+        return {}
+
+    return {}
+
+
+@pytest.fixture(scope="session", name="file_system")
+def file_system(cloud):
+    if cloud == "abfs":
+        return None
+    elif cloud == "dirfs":
+        return DirFileSystem(os.path.dirname(__file__))
 
     return {}
 
@@ -114,12 +129,15 @@ def tmp_dir_cloud(cloud_path, storage_options):
 
 
 @pytest.fixture
-def tmp_cloud_path(request, tmp_dir_cloud):
-    name = request.node.name
-    my_uuid = shortuuid.uuid()
-    # Strip out the "test_" at the beginning of each method name, make it a little
-    # shorter, and add a disambuating UUID.
-    return f"{tmp_dir_cloud}/{name[5:25]}_{my_uuid}"
+def tmp_cloud_path(request, cloud, tmp_dir_cloud, tmp_path):
+    if cloud == "abfs":
+        name = request.node.name
+        my_uuid = shortuuid.uuid()
+        # Strip out the "test_" at the beginning of each method name, make it a little
+        # shorter, and add a disambuating UUID.
+        return f"{tmp_dir_cloud}/{name[5:25]}_{my_uuid}"
+    elif cloud == "dirfs":
+        return tmp_path
 
 
 @pytest.fixture

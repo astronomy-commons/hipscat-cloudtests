@@ -34,7 +34,9 @@ def test_catalog_import_write_to_cloud(
     runner.run(args, dask_client)
 
     # Check that the catalog metadata file exists
-    catalog = Catalog.read_from_hipscat(args.catalog_path, storage_options=storage_options)
+    catalog = Catalog.read_from_hipscat(
+        args.catalog_path, file_system=file_system, storage_options=storage_options
+    )
     assert catalog.on_disk
     assert catalog.catalog_path == args.catalog_path
     assert catalog.catalog_info.ra_column == "ra"
@@ -46,7 +48,13 @@ def test_catalog_import_write_to_cloud(
     output_file = os.path.join(args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
 
     expected_ids = [*range(700, 831)]
-    assert_parquet_file_ids(output_file, "id", expected_ids, storage_options=storage_options)
+    assert_parquet_file_ids(
+        output_file,
+        "id",
+        expected_ids,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
 
 
 @pytest.mark.dask
@@ -92,7 +100,7 @@ def test_read_csv_cloud(storage_options, small_sky_parts_dir_cloud):
     """Verify we can read the csv file into a single data frame."""
     single_file = os.path.join(small_sky_parts_dir_cloud, "catalog_00_of_05.csv")
     total_chunks = 0
-    for frame in CsvReader(storage_options=storage_options).read(single_file):
+    for frame in CsvReader(file_system=file_system, storage_options=storage_options).read(single_file):
         total_chunks += 1
         assert len(frame) == 25
 

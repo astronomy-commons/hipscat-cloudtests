@@ -22,13 +22,21 @@ def test_crossmatch_with_margin(
     xmatch_with_margin,
     storage_options,
 ):
-    small_sky_margin_catalog = lsdb.read_hipscat(small_sky_margin_dir_cloud, storage_options=storage_options)
+    small_sky_margin_catalog = lsdb.read_hipscat(
+        small_sky_margin_dir_cloud,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
     small_sky_order1_catalog = lsdb.read_hipscat(
         small_sky_order1_dir_cloud,
         margin_cache=small_sky_margin_catalog,
         storage_options=storage_options,
     )
-    small_sky_xmatch_catalog = lsdb.read_hipscat(small_sky_xmatch_dir_cloud, storage_options=storage_options)
+    small_sky_xmatch_catalog = lsdb.read_hipscat(
+        small_sky_xmatch_dir_cloud,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
     xmatched = small_sky_xmatch_catalog.crossmatch(
         small_sky_order1_catalog, n_neighbors=3, radius_arcsec=2 * 3600
     ).compute()

@@ -50,7 +50,7 @@ def catalog_info(catalog_info_data) -> CatalogInfo:
     return CatalogInfo(**catalog_info_data)
 
 
-def test_write_catalog_info(tmp_cloud_path, catalog_info, storage_options):
+def test_write_catalog_info(tmp_cloud_path, catalog_info, file_system, storage_options):
     """Test that we accurately write out catalog metadata"""
     catalog_base_dir = tmp_cloud_path
     expected_lines = [
@@ -70,10 +70,15 @@ def test_write_catalog_info(tmp_cloud_path, catalog_info, storage_options):
         storage_options=storage_options,
     )
     metadata_filename = os.path.join(catalog_base_dir, "catalog_info.json")
-    assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
+    assert_text_file_matches(
+        expected_lines,
+        metadata_filename,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
 
 
-def test_write_provenance_info(tmp_cloud_path, catalog_info, storage_options):
+def test_write_provenance_info(tmp_cloud_path, catalog_info, file_system, storage_options):
     """Test that we accurately write out tool-provided generation metadata"""
     catalog_base_dir = tmp_cloud_path
     expected_lines = [
@@ -111,7 +116,12 @@ def test_write_provenance_info(tmp_cloud_path, catalog_info, storage_options):
         storage_options=storage_options,
     )
     metadata_filename = os.path.join(catalog_base_dir, "provenance_info.json")
-    assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
+    assert_text_file_matches(
+        expected_lines,
+        metadata_filename,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
 
 
 def test_write_parquet_metadata(
@@ -164,9 +174,13 @@ def test_write_parquet_metadata(
 
 def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, storage_options: dict = None):
     """Check parquet schema against expectations"""
-    assert file_io.does_file_or_directory_exist(file_name, storage_options=storage_options)
+    assert file_io.does_file_or_directory_exist(
+        file_name, file_system=file_system, storage_options=storage_options
+    )
 
-    single_metadata = file_io.read_parquet_metadata(file_name, storage_options=storage_options)
+    single_metadata = file_io.read_parquet_metadata(
+        file_name, file_system=file_system, storage_options=storage_options
+    )
     schema = single_metadata.schema.to_arrow_schema()
 
     assert len(schema) == len(
@@ -177,7 +191,7 @@ def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, 
 
     assert schema.equals(expected_schema, check_metadata=False)
 
-    file_system, file_pointer = get_fs(file_name, storage_options=storage_options)
+    file_system, file_pointer = get_fs(file_name, file_system=file_system, storage_options=storage_options)
     parquet_file = pq.ParquetFile(file_pointer, filesystem=file_system)
     assert parquet_file.metadata.num_row_groups == expected_num_row_groups
 
@@ -188,14 +202,19 @@ def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, 
             assert column_metadata.file_path.endswith(".parquet")
 
 
-def test_read_write_fits_point_map(tmp_cloud_path, storage_options):
+def test_read_write_fits_point_map(tmp_cloud_path, file_system, storage_options):
     """Check that we write and can read a FITS file for spatial distribution."""
     initial_histogram = hist.empty_histogram(1)
     filled_pixels = [51, 29, 51, 0]
     initial_histogram[44:] = filled_pixels[:]
-    io.write_fits_map(tmp_cloud_path, initial_histogram, storage_options=storage_options)
+    io.write_fits_map(
+        tmp_cloud_path,
+        initial_histogram,
+        file_system=file_system,
+        storage_options=storage_options,
+    )
 
     output_file = os.path.join(tmp_cloud_path, "point_map.fits")
 
-    output = file_io.read_fits_image(output_file, storage_options=storage_options)
+    output = file_io.read_fits_image(output_file, file_system=file_system, storage_options=storage_options)
     npt.assert_array_equal(output, initial_histogram)

@@ -50,7 +50,9 @@ def test_object_to_self_write_to_cloud(
     assert catalog.catalog_info.contains_leaf_files
 
     parquet_file_name = os.path.join(small_sky_soap_args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
-    parquet_file_metadata = read_parquet_metadata(parquet_file_name, storage_options=storage_options)
+    parquet_file_metadata = read_parquet_metadata(
+        parquet_file_name, file_system=file_system, storage_options=storage_options
+    )
     assert parquet_file_metadata.num_row_groups == 4
     assert parquet_file_metadata.num_rows == 131
     assert parquet_file_metadata.num_columns == 8
@@ -83,7 +85,11 @@ def test_object_to_self_write_to_cloud(
 
 @pytest.mark.dask
 def test_object_to_self_read_from_cloud(
-    dask_client, tmp_path, small_sky_dir_cloud, small_sky_order1_dir_cloud, storage_options
+    dask_client,
+    tmp_path,
+    small_sky_dir_cloud,
+    small_sky_order1_dir_cloud,
+    storage_options,
 ):
     """Test creating association between object catalogs.
 
@@ -118,7 +124,9 @@ def test_object_to_self_read_from_cloud(
     assert catalog.catalog_info.contains_leaf_files
 
     parquet_file_name = os.path.join(small_sky_soap_args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
-    parquet_file_metadata = read_parquet_metadata(parquet_file_name, storage_options=storage_options)
+    parquet_file_metadata = read_parquet_metadata(
+        parquet_file_name, file_system=file_system, storage_options=storage_options
+    )
     assert parquet_file_metadata.num_row_groups == 4
     assert parquet_file_metadata.num_rows == 131
     assert parquet_file_metadata.num_columns == 8

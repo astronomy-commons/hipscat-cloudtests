@@ -29,7 +29,9 @@ def test_run_index(
     runner.run(args, dask_client)
 
     # Check that the catalog metadata file exists
-    catalog = Dataset.read_from_hipscat(args.catalog_path, storage_options=storage_options)
+    catalog = Dataset.read_from_hipscat(
+        args.catalog_path, file_system=file_system, storage_options=storage_options
+    )
     assert catalog.on_disk
     assert catalog.catalog_path == args.catalog_path
 
@@ -44,7 +46,9 @@ def test_run_index(
     )
 
     outfile = os.path.join(args.catalog_path, "index", "part.0.parquet")
-    schema = read_parquet_metadata(outfile, storage_options=storage_options).schema.to_arrow_schema()
+    schema = read_parquet_metadata(
+        outfile, file_system=file_system, storage_options=storage_options
+    ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
     schema = read_parquet_metadata(
@@ -53,7 +57,8 @@ def test_run_index(
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
     schema = read_parquet_metadata(
-        os.path.join(args.catalog_path, "_common_metadata"), storage_options=storage_options
+        os.path.join(args.catalog_path, "_common_metadata"),
+        storage_options=storage_options,
     ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
@@ -79,7 +84,9 @@ def test_run_index_read_from_cloud(
     runner.run(args, dask_client)
 
     # Check that the catalog metadata file exists
-    catalog = Dataset.read_from_hipscat(args.catalog_path, storage_options=storage_options)
+    catalog = Dataset.read_from_hipscat(
+        args.catalog_path, file_system=file_system, storage_options=storage_options
+    )
     assert catalog.on_disk
     assert catalog.catalog_path == args.catalog_path
 

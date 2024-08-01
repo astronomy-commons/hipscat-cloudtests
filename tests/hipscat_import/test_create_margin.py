@@ -8,8 +8,9 @@ def test_margin_cache_gen(
     small_sky_order1_dir_local,
     tmp_path,
     tmp_cloud_path,
-    storage_options,
     dask_client,
+    file_system,
+    storage_options,
 ):
     """Test that margin cache generation works end to end.
 
@@ -34,7 +35,9 @@ def test_margin_cache_gen(
 
     mc.generate_margin_cache(args, dask_client)
 
-    catalog = HealpixDataset.read_from_hipscat(args.catalog_path, storage_options=storage_options)
+    catalog = HealpixDataset.read_from_hipscat(
+        args.catalog_path, file_system=file_system, storage_options=storage_options
+    )
     assert catalog.on_disk
     assert catalog.catalog_path == args.catalog_path
 
