@@ -1,5 +1,4 @@
 import hipscat_import.margin_cache.margin_cache as mc
-import pytest
 from hipscat.catalog.healpix_dataset.healpix_dataset import HealpixDataset
 from hipscat_import.margin_cache.margin_cache_arguments import MarginCacheArguments
 
