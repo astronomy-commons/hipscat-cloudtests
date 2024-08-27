@@ -10,7 +10,7 @@ from hipscat_import.soap.arguments import SoapArguments
 @pytest.mark.dask
 def test_object_to_self_write_to_cloud(
     dask_client,
-    tmp_path,
+    tmp_path_factory,
     tmp_cloud_path,
     small_sky_dir_local,
     small_sky_order1_dir_local,
@@ -35,7 +35,7 @@ def test_object_to_self_write_to_cloud(
         output_path=tmp_cloud_path,
         output_storage_options=storage_options,
         progress_bar=False,
-        tmp_dir=tmp_path,
+        tmp_dir=tmp_path_factory.mktemp("small_sky_order_to_order1"),
     )
     runner.run(small_sky_soap_args, dask_client)
 
@@ -66,7 +66,7 @@ def test_object_to_self_write_to_cloud(
         output_path=tmp_cloud_path,
         output_storage_options=storage_options,
         progress_bar=False,
-        tmp_dir=tmp_path,
+        tmp_dir=tmp_path_factory.mktemp("small_sky_to_order1_soft"),
     )
     runner.run(small_sky_soap_args, dask_client)
 
