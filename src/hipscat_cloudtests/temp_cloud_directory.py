@@ -5,7 +5,6 @@ import time
 
 import shortuuid
 from hipscat.io.file_io import file_io
-from upath import UPath
 
 
 class TempCloudDirectory:

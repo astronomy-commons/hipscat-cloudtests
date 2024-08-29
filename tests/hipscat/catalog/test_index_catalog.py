@@ -4,8 +4,8 @@ from hipscat.loaders import read_from_hipscat
 from hipscat.pixel_math import HealpixPixel
 
 
-def test_loc_partition(small_sky_index_dir_cloud, storage_options):
-    catalog = read_from_hipscat(small_sky_index_dir_cloud, storage_options=storage_options)
+def test_loc_partition(small_sky_index_dir_cloud):
+    catalog = read_from_hipscat(small_sky_index_dir_cloud)
 
     assert isinstance(catalog, IndexCatalog)
     assert catalog.on_disk

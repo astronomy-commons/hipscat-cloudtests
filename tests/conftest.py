@@ -111,7 +111,7 @@ def small_sky_margin_dir_cloud(cloud_path):
 
 
 @pytest.fixture(scope="session", name="tmp_dir_cloud")
-def tmp_dir_cloud(cloud_path, storage_options):
+def tmp_dir_cloud(cloud_path):
     """Create a single client for use by all unit test cases."""
     tmp = TempCloudDirectory(
         cloud_path / "tmp",
@@ -136,23 +136,23 @@ def small_sky_xmatch_dir_cloud(cloud_path):
 
 
 @pytest.fixture
-def small_sky_catalog_cloud(small_sky_dir_cloud, storage_options):
-    return lsdb.read_hipscat(small_sky_dir_cloud, storage_options=storage_options)
+def small_sky_catalog_cloud(small_sky_dir_cloud):
+    return lsdb.read_hipscat(small_sky_dir_cloud)
 
 
 @pytest.fixture
-def small_sky_xmatch_catalog_cloud(small_sky_xmatch_dir_cloud, storage_options):
-    return lsdb.read_hipscat(small_sky_xmatch_dir_cloud, storage_options=storage_options)
+def small_sky_xmatch_catalog_cloud(small_sky_xmatch_dir_cloud):
+    return lsdb.read_hipscat(small_sky_xmatch_dir_cloud)
 
 
 @pytest.fixture
-def small_sky_order1_hipscat_catalog_cloud(small_sky_order1_dir_cloud, storage_options):
-    return hc.catalog.Catalog.read_from_hipscat(small_sky_order1_dir_cloud, storage_options=storage_options)
+def small_sky_order1_hipscat_catalog_cloud(small_sky_order1_dir_cloud):
+    return hc.catalog.Catalog.read_from_hipscat(small_sky_order1_dir_cloud)
 
 
 @pytest.fixture
-def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud, storage_options):
-    return lsdb.read_hipscat(small_sky_order1_dir_cloud, storage_options=storage_options)
+def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud):
+    return lsdb.read_hipscat(small_sky_order1_dir_cloud)
 
 
 @pytest.fixture

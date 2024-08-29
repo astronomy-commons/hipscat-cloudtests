@@ -1,7 +1,5 @@
 """Tests of file IO (reads and writes)"""
 
-import os
-
 import hipscat.io.write_metadata as io
 import hipscat.pixel_math as hist
 import numpy.testing as npt
@@ -49,7 +47,7 @@ def catalog_info(catalog_info_data) -> CatalogInfo:
     return CatalogInfo(**catalog_info_data)
 
 
-def test_write_catalog_info(tmp_cloud_path, catalog_info, storage_options):
+def test_write_catalog_info(tmp_cloud_path, catalog_info):
     """Test that we accurately write out catalog metadata"""
     catalog_base_dir = tmp_cloud_path
     expected_lines = [
@@ -63,16 +61,12 @@ def test_write_catalog_info(tmp_cloud_path, catalog_info, storage_options):
         "}",
     ]
 
-    io.write_catalog_info(
-        dataset_info=catalog_info,
-        catalog_base_dir=catalog_base_dir,
-        storage_options=storage_options,
-    )
+    io.write_catalog_info(dataset_info=catalog_info, catalog_base_dir=catalog_base_dir)
     metadata_filename = catalog_base_dir / "catalog_info.json"
-    assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
+    assert_text_file_matches(expected_lines, metadata_filename)
 
 
-def test_write_provenance_info(tmp_cloud_path, catalog_info, storage_options):
+def test_write_provenance_info(tmp_cloud_path, catalog_info):
     """Test that we accurately write out tool-provided generation metadata"""
     catalog_base_dir = tmp_cloud_path
     expected_lines = [
@@ -107,65 +101,33 @@ def test_write_provenance_info(tmp_cloud_path, catalog_info, storage_options):
         catalog_base_dir=catalog_base_dir,
         dataset_info=catalog_info,
         tool_args=tool_args,
-        storage_options=storage_options,
     )
     metadata_filename = catalog_base_dir / "provenance_info.json"
-    assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
+    assert_text_file_matches(expected_lines, metadata_filename)
 
 
-def test_write_parquet_metadata(
-    tmp_cloud_path,
-    small_sky_dir_cloud,
-    basic_catalog_parquet_metadata,
-    storage_options,
-):
+def test_write_parquet_metadata(tmp_cloud_path, small_sky_dir_cloud, basic_catalog_parquet_metadata):
     """Use existing catalog parquet files and create new metadata files for it"""
     catalog_base_dir = tmp_cloud_path
 
-    write_parquet_metadata(
-        catalog_path=small_sky_dir_cloud,
-        storage_options=storage_options,
-        output_path=catalog_base_dir,
-    )
+    write_parquet_metadata(catalog_path=small_sky_dir_cloud, output_path=catalog_base_dir)
 
-    check_parquet_schema(
-        catalog_base_dir / "_metadata",
-        basic_catalog_parquet_metadata,
-        storage_options=storage_options,
-    )
+    check_parquet_schema(catalog_base_dir / "_metadata", basic_catalog_parquet_metadata)
     ## _common_metadata has 0 row groups
-    check_parquet_schema(
-        catalog_base_dir / "_common_metadata",
-        basic_catalog_parquet_metadata,
-        0,
-        storage_options=storage_options,
-    )
+    check_parquet_schema(catalog_base_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
 
     ## Re-write - should still have the same properties.
-    write_parquet_metadata(
-        catalog_path=small_sky_dir_cloud,
-        storage_options=storage_options,
-        output_path=catalog_base_dir,
-    )
-    check_parquet_schema(
-        catalog_base_dir / "_metadata",
-        basic_catalog_parquet_metadata,
-        storage_options=storage_options,
-    )
+    write_parquet_metadata(catalog_path=small_sky_dir_cloud, output_path=catalog_base_dir)
+    check_parquet_schema(catalog_base_dir / "_metadata", basic_catalog_parquet_metadata)
     ## _common_metadata has 0 row groups
-    check_parquet_schema(
-        catalog_base_dir / "_common_metadata",
-        basic_catalog_parquet_metadata,
-        0,
-        storage_options=storage_options,
-    )
+    check_parquet_schema(catalog_base_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
 
 
-def check_parquet_schema(file_path, expected_schema, expected_num_row_groups=1, storage_options: dict = None):
+def check_parquet_schema(file_path, expected_schema, expected_num_row_groups=1):
     """Check parquet schema against expectations"""
-    assert file_io.does_file_or_directory_exist(file_path, storage_options=storage_options)
+    assert file_io.does_file_or_directory_exist(file_path)
 
-    single_metadata = file_io.read_parquet_metadata(file_path, storage_options=storage_options)
+    single_metadata = file_io.read_parquet_metadata(file_path)
     schema = single_metadata.schema.to_arrow_schema()
 
     assert len(schema) == len(
@@ -186,14 +148,14 @@ def check_parquet_schema(file_path, expected_schema, expected_num_row_groups=1, 
             assert column_metadata.file_path.endswith(".parquet")
 
 
-def test_read_write_fits_point_map(tmp_cloud_path, storage_options):
+def test_read_write_fits_point_map(tmp_cloud_path):
     """Check that we write and can read a FITS file for spatial distribution."""
     initial_histogram = hist.empty_histogram(1)
     filled_pixels = [51, 29, 51, 0]
     initial_histogram[44:] = filled_pixels[:]
-    io.write_fits_map(tmp_cloud_path, initial_histogram, storage_options=storage_options)
+    io.write_fits_map(tmp_cloud_path, initial_histogram)
 
     output_file = tmp_cloud_path / "point_map.fits"
 
-    output = file_io.read_fits_image(output_file, storage_options=storage_options)
+    output = file_io.read_fits_image(output_file)
     npt.assert_array_equal(output, initial_histogram)
