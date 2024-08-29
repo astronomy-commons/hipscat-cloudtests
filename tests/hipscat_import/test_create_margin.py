@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import hipscat_import.margin_cache.margin_cache as mc
 from hipscat.catalog.healpix_dataset.healpix_dataset import HealpixDataset
 from hipscat_import.margin_cache.margin_cache_arguments import MarginCacheArguments
@@ -49,13 +51,14 @@ def test_margin_cache_gen_read_from_cloud(
     - CLOUD origin catalog
     - writing to local tmp
     """
+    tmp_dir = Path("/home/delucchi/git/upath/hipscat-cloudtests/tests/hipscat_import")
     args = MarginCacheArguments(
         input_catalog_path=small_sky_order1_dir_cloud,
-        input_storage_options=storage_options,
-        output_path=tmp_path,
+        # input_storage_options=storage_options,
+        output_path=tmp_dir,
         output_artifact_name="small_sky_order1_margin",
-        dask_tmp=tmp_path,
-        tmp_dir=tmp_path,
+        dask_tmp=tmp_dir,
+        tmp_dir=tmp_dir,
         margin_order=8,
         fine_filtering=False,
         progress_bar=False,

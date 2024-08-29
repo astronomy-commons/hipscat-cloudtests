@@ -43,7 +43,7 @@ def test_catalog_import_write_to_cloud(
     assert len(catalog.get_healpix_pixels()) == 1
 
     # Check that the catalog parquet file exists and contains correct object IDs
-    output_file = os.path.join(args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
+    output_file = args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
 
     expected_ids = [*range(700, 831)]
     assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids, storage_options=storage_options)
@@ -60,9 +60,9 @@ def test_catalog_import_read_from_cloud(
     args = ImportArguments(
         output_artifact_name="small_sky_object_catalog",
         input_path=small_sky_parts_dir_cloud,
-        input_storage_options=storage_options,
+        # input_storage_options=storage_options,
         file_reader=CsvReader(
-            storage_options=storage_options,
+            # storage_options=storage_options,
         ),
         output_path=tmp_path,
         dask_tmp=tmp_path,
@@ -82,7 +82,7 @@ def test_catalog_import_read_from_cloud(
     assert len(catalog.get_healpix_pixels()) == 1
 
     # Check that the catalog parquet file exists and contains correct object IDs
-    output_file = os.path.join(args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
+    output_file = args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
 
     expected_ids = [*range(700, 831)]
     assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids)
@@ -90,7 +90,7 @@ def test_catalog_import_read_from_cloud(
 
 def test_read_csv_cloud(storage_options, small_sky_parts_dir_cloud):
     """Verify we can read the csv file into a single data frame."""
-    single_file = os.path.join(small_sky_parts_dir_cloud, "catalog_00_of_05.csv")
+    single_file = small_sky_parts_dir_cloud / "catalog_00_of_05.csv"
     total_chunks = 0
     for frame in CsvReader(storage_options=storage_options).read(single_file):
         total_chunks += 1

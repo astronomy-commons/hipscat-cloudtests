@@ -49,7 +49,7 @@ def test_object_to_self_write_to_cloud(
     assert catalog.catalog_info.total_rows == 131
     assert catalog.catalog_info.contains_leaf_files
 
-    parquet_file_name = os.path.join(small_sky_soap_args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
+    parquet_file_name = small_sky_soap_args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
     parquet_file_metadata = read_parquet_metadata(parquet_file_name, storage_options=storage_options)
     assert parquet_file_metadata.num_row_groups == 4
     assert parquet_file_metadata.num_rows == 131
@@ -117,7 +117,7 @@ def test_object_to_self_read_from_cloud(
     assert catalog.catalog_info.total_rows == 131
     assert catalog.catalog_info.contains_leaf_files
 
-    parquet_file_name = os.path.join(small_sky_soap_args.catalog_path, "Norder=0", "Dir=0", "Npix=11.parquet")
+    parquet_file_name = small_sky_soap_args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
     parquet_file_metadata = read_parquet_metadata(parquet_file_name, storage_options=storage_options)
     assert parquet_file_metadata.num_row_groups == 4
     assert parquet_file_metadata.num_rows == 131

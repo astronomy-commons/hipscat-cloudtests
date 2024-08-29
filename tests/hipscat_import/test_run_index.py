@@ -43,17 +43,17 @@ def test_run_index(
         ]
     )
 
-    outfile = os.path.join(args.catalog_path, "index", "part.0.parquet")
+    outfile = args.catalog_path / "index" / "part.0.parquet"
     schema = read_parquet_metadata(outfile, storage_options=storage_options).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
     schema = read_parquet_metadata(
-        os.path.join(args.catalog_path, "_metadata"), storage_options=storage_options
+        args.catalog_path / "_metadata", storage_options=storage_options
     ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
     schema = read_parquet_metadata(
-        os.path.join(args.catalog_path, "_common_metadata"), storage_options=storage_options
+        args.catalog_path / "_common_metadata", storage_options=storage_options
     ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
@@ -93,14 +93,12 @@ def test_run_index_read_from_cloud(
         ]
     )
 
-    outfile = os.path.join(args.catalog_path, "index", "part.0.parquet")
+    outfile = args.catalog_path / "index" / "part.0.parquet"
     schema = read_parquet_metadata(outfile).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(os.path.join(args.catalog_path, "_metadata")).schema.to_arrow_schema()
+    schema = read_parquet_metadata(args.catalog_path / "_metadata").schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(
-        os.path.join(args.catalog_path, "_common_metadata")
-    ).schema.to_arrow_schema()
+    schema = read_parquet_metadata(args.catalog_path / "_common_metadata").schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)

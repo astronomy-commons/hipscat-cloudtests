@@ -10,7 +10,6 @@ import pyarrow.parquet as pq
 import pytest
 from hipscat.catalog.catalog_info import CatalogInfo
 from hipscat.io import file_io
-from hipscat.io.file_io.file_pointer import get_fs
 from hipscat.io.parquet_metadata import write_parquet_metadata
 
 from hipscat_cloudtests import assert_text_file_matches
@@ -69,7 +68,7 @@ def test_write_catalog_info(tmp_cloud_path, catalog_info, storage_options):
         catalog_base_dir=catalog_base_dir,
         storage_options=storage_options,
     )
-    metadata_filename = os.path.join(catalog_base_dir, "catalog_info.json")
+    metadata_filename = catalog_base_dir / "catalog_info.json"
     assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
 
 
@@ -110,7 +109,7 @@ def test_write_provenance_info(tmp_cloud_path, catalog_info, storage_options):
         tool_args=tool_args,
         storage_options=storage_options,
     )
-    metadata_filename = os.path.join(catalog_base_dir, "provenance_info.json")
+    metadata_filename = catalog_base_dir / "provenance_info.json"
     assert_text_file_matches(expected_lines, metadata_filename, storage_options=storage_options)
 
 
@@ -130,13 +129,13 @@ def test_write_parquet_metadata(
     )
 
     check_parquet_schema(
-        os.path.join(catalog_base_dir, "_metadata"),
+        catalog_base_dir / "_metadata",
         basic_catalog_parquet_metadata,
         storage_options=storage_options,
     )
     ## _common_metadata has 0 row groups
     check_parquet_schema(
-        os.path.join(catalog_base_dir, "_common_metadata"),
+        catalog_base_dir / "_common_metadata",
         basic_catalog_parquet_metadata,
         0,
         storage_options=storage_options,
@@ -149,24 +148,24 @@ def test_write_parquet_metadata(
         output_path=catalog_base_dir,
     )
     check_parquet_schema(
-        os.path.join(catalog_base_dir, "_metadata"),
+        catalog_base_dir / "_metadata",
         basic_catalog_parquet_metadata,
         storage_options=storage_options,
     )
     ## _common_metadata has 0 row groups
     check_parquet_schema(
-        os.path.join(catalog_base_dir, "_common_metadata"),
+        catalog_base_dir / "_common_metadata",
         basic_catalog_parquet_metadata,
         0,
         storage_options=storage_options,
     )
 
 
-def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, storage_options: dict = None):
+def check_parquet_schema(file_path, expected_schema, expected_num_row_groups=1, storage_options: dict = None):
     """Check parquet schema against expectations"""
-    assert file_io.does_file_or_directory_exist(file_name, storage_options=storage_options)
+    assert file_io.does_file_or_directory_exist(file_path, storage_options=storage_options)
 
-    single_metadata = file_io.read_parquet_metadata(file_name, storage_options=storage_options)
+    single_metadata = file_io.read_parquet_metadata(file_path, storage_options=storage_options)
     schema = single_metadata.schema.to_arrow_schema()
 
     assert len(schema) == len(
@@ -177,8 +176,7 @@ def check_parquet_schema(file_name, expected_schema, expected_num_row_groups=1, 
 
     assert schema.equals(expected_schema, check_metadata=False)
 
-    file_system, file_pointer = get_fs(file_name, storage_options=storage_options)
-    parquet_file = pq.ParquetFile(file_pointer, filesystem=file_system)
+    parquet_file = pq.ParquetFile(file_path.path, filesystem=file_path.fs)
     assert parquet_file.metadata.num_row_groups == expected_num_row_groups
 
     for row_index in range(0, parquet_file.metadata.num_row_groups):
@@ -195,7 +193,7 @@ def test_read_write_fits_point_map(tmp_cloud_path, storage_options):
     initial_histogram[44:] = filled_pixels[:]
     io.write_fits_map(tmp_cloud_path, initial_histogram, storage_options=storage_options)
 
-    output_file = os.path.join(tmp_cloud_path, "point_map.fits")
+    output_file = tmp_cloud_path / "point_map.fits"
 
     output = file_io.read_fits_image(output_file, storage_options=storage_options)
     npt.assert_array_equal(output, initial_histogram)

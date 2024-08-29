@@ -1,11 +1,11 @@
 """Testing utility class to create a temporary directory that's local
 to some unit test execution."""
 
-import os
 import time
 
 import shortuuid
 from hipscat.io.file_io import file_io
+from upath import UPath
 
 
 class TempCloudDirectory:
@@ -14,19 +14,17 @@ class TempCloudDirectory:
 
     On exit, we will recursively remove the created directory."""
 
-    def __init__(self, prefix_path, method_name="", storage_options: dict = None):
+    def __init__(self, prefix_path, method_name=""):
         """Create a new context manager.
 
         This will NOT create the new temp path - that happens when we enter the context.
 
         Args:
-            prefix_path (str): base path to the cloud resource
+            prefix_path (UPath): base path to the cloud resource
             method_name (str): optional token to indicate the method under test
-            storage_options (dict): dictionary that contains abstract filesystem credentials
         """
         self.prefix_path = prefix_path
         self.method_name = method_name
-        self.storage_options = storage_options
         self.temp_path = ""
 
     def __enter__(self):
@@ -46,7 +44,7 @@ class TempCloudDirectory:
             <prefix_path>/<method_name><some random string>
         """
         my_uuid = shortuuid.uuid()
-        self.temp_path = os.path.join(self.prefix_path, f"{self.method_name}-{my_uuid}")
+        self.temp_path = self.prefix_path / f"{self.method_name}-{my_uuid}"
         return self.temp_path
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -66,7 +64,7 @@ class TempCloudDirectory:
             for attempt_number in range(1, num_retries + 1):
                 ## Try
                 try:
-                    file_io.remove_directory(self.temp_path, storage_options=self.storage_options)
+                    file_io.remove_directory(self.temp_path)
                     return
                 except RuntimeError:
                     if attempt_number == num_retries:

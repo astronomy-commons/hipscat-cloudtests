@@ -40,7 +40,7 @@ def test_empty_directory(tmp_cloud_path, storage_options):
         Catalog.read_from_hipscat(catalog_path, storage_options=storage_options)
 
     ## catalog_info file exists - getting closer
-    file_name = os.path.join(catalog_path, "catalog_info.json")
+    file_name = catalog_path / "catalog_info.json"
     file_io.write_string_to_file(
         file_name,
         string='{"catalog_name":"empty", "catalog_type":"source"}',
