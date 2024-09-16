@@ -6,8 +6,8 @@ from hipscat.io.file_io import (
     get_file_pointer_from_path,
     load_csv_to_pandas,
     load_json_file,
-    load_parquet_to_pandas,
     load_text_file,
+    read_parquet_file_to_pandas,
     write_dataframe_to_csv,
     write_string_to_file,
 )
@@ -37,11 +37,16 @@ def test_load_json(small_sky_dir_local, small_sky_dir_cloud, storage_options):
     assert json_dict_cloud == json_dict_local
 
 
-def test_load_parquet_to_pandas(small_sky_dir_local, small_sky_dir_cloud, storage_options):
+def test_read_parquet_to_pandas(
+    small_sky_catalog_cloud, small_sky_dir_local, small_sky_dir_cloud, storage_options
+):
     pixel_data_path = pixel_catalog_file(small_sky_dir_local, 0, 11)
     pixel_data_path_cloud = pixel_catalog_file(small_sky_dir_cloud, 0, 11)
     parquet_df = pd.read_parquet(pixel_data_path)
-    loaded_df = load_parquet_to_pandas(pixel_data_path_cloud, storage_options=storage_options)
+    catalog_schema = small_sky_catalog_cloud.hc_structure.schema
+    loaded_df = read_parquet_file_to_pandas(
+        pixel_data_path_cloud, schema=catalog_schema, storage_options=storage_options
+    )
     pd.testing.assert_frame_equal(parquet_df, loaded_df)
 
 
