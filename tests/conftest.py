@@ -34,7 +34,6 @@ def cloud(request):
 @pytest.fixture(scope="session", name="cloud_path")
 def cloud_path(cloud):
     if cloud == "abfs":
-
         storage_options = {
             "account_name": os.environ.get("ABFS_LINCCDATA_ACCOUNT_NAME"),
             "account_key": os.environ.get("ABFS_LINCCDATA_ACCOUNT_KEY"),
