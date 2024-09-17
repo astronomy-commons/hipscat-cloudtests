@@ -30,7 +30,7 @@ class TempCloudDirectory:
         """Create a new temporary path
 
         Returns:
-            string path that's been created. it will take the form of
+            UPath object that's been created. it will take the form of
             <prefix_path>/<method_name><some random string>
         """
         return self.open()
@@ -39,7 +39,7 @@ class TempCloudDirectory:
         """Create a new temporary path
 
         Returns:
-            string path that's been created. it will take the form of
+            UPath object that's been created. it will take the form of
             <prefix_path>/<method_name><some random string>
         """
         my_uuid = shortuuid.uuid()

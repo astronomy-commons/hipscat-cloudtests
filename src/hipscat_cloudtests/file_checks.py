@@ -23,7 +23,7 @@ def assert_text_file_matches(expected_lines, file_name):
 
     Args:
         expected_lines(:obj:`string array`) list of strings, formatted as regular expressions.
-        file_name (str): fully-specified path of the file to read
+        file_name (UPath): fully-specified path of the file to read
     """
     assert does_file_or_directory_exist(file_name), f"file not found [{file_name}]"
     contents = load_text_file(file_name)
@@ -43,7 +43,7 @@ def assert_parquet_file_ids(file_name, id_column, schema: pa.Schema, expected_id
     a list of expected objects.
 
     Args:
-        file_name (str): fully-specified path of the file to read
+        file_name (UPath): fully-specified path of the file to read
         id_column (str): column in the parquet file to read IDs from
         expected_ids (:obj:`int[]`): list of expected ids in `id_column`
         resort_ids (bool): should we re-sort the ids? if False, we will check that the ordering
