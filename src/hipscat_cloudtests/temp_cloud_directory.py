@@ -13,7 +13,7 @@ class TempCloudDirectory:
 
     On exit, we will recursively remove the created directory."""
 
-    def __init__(self, prefix_path, method_name=""):
+    def __init__(self, prefix_path, method_name="", real_directories=True):
         """Create a new context manager.
 
         This will NOT create the new temp path - that happens when we enter the context.
@@ -21,10 +21,13 @@ class TempCloudDirectory:
         Args:
             prefix_path (UPath): base path to the cloud resource
             method_name (str): optional token to indicate the method under test
+            real_directories (bool): are directories in this file system real, and
+                should be deleted along with other temp content?
         """
         self.prefix_path = prefix_path
         self.method_name = method_name
         self.temp_path = ""
+        self.real_directories = real_directories
 
     def __enter__(self):
         """Create a new temporary path
@@ -63,7 +66,10 @@ class TempCloudDirectory:
             for attempt_number in range(1, num_retries + 1):
                 ## Try
                 try:
-                    file_io.remove_directory(self.temp_path)
+                    if self.real_directories:
+                        file_io.remove_directory(self.temp_path)
+                    else:
+                        _try_remove_contents(self.temp_path)
                     return
                 except RuntimeError:
                     if attempt_number == num_retries:
@@ -72,3 +78,11 @@ class TempCloudDirectory:
                 print(f"Failed to remove directory {self.temp_path}. Trying again.")
                 time.sleep(sleep_time)
                 sleep_time *= 2
+
+
+def _try_remove_contents(directory):
+    for item in directory.iterdir():
+        if item.is_dir():
+            _try_remove_contents(item)
+        else:
+            item.unlink()
