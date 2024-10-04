@@ -52,6 +52,7 @@ def s3_server(cloud):
 
     port = 5555
     endpoint_uri = f"http://127.0.0.1:{port}/"
+    # pylint: disable=consider-using-with
     proc = subprocess.Popen(
         shlex.split(f"moto_server -p {port}"),
         stderr=subprocess.DEVNULL,
@@ -64,7 +65,7 @@ def s3_server(cloud):
                 r = requests.get(endpoint_uri, timeout=10)
                 if r.ok:
                     break
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 pass
             timeout -= 0.1
             time.sleep(0.1)
