@@ -40,7 +40,7 @@ def test_directory_has_contents(small_sky_order1_dir_cloud):
     assert directory_has_contents(small_sky_order1_dir_cloud)
 
 
-def test_get_directory_contents(small_sky_order1_dir_cloud):
+def test_get_directory_contents(small_sky_order1_dir_cloud, cloud):
     small_sky_contents = get_directory_contents(small_sky_order1_dir_cloud)
 
     expected = [
@@ -52,6 +52,9 @@ def test_get_directory_contents(small_sky_order1_dir_cloud):
         "point_map.fits",
         "provenance_info.json",
     ]
+    if cloud == "local_s3":
+        # Sub-directories aren't really "a thing" for s3
+        expected = expected[1:]
 
     expected = [small_sky_order1_dir_cloud / file_name for file_name in expected]
 

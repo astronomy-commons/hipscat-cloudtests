@@ -1,6 +1,10 @@
 import os
+import shlex
+import subprocess
+import time
 from pathlib import Path
 
+import fsspec
 import hipscat as hc
 import lsdb
 import pytest
@@ -23,7 +27,7 @@ SMALL_SKY_DIR_NAME = "small_sky"
 
 
 def pytest_addoption(parser):
-    parser.addoption("--cloud", action="store", default="abfs")
+    parser.addoption("--cloud", action="store", default="local_s3")
 
 
 @pytest.fixture(scope="session", name="cloud")
@@ -31,8 +35,53 @@ def cloud(request):
     return request.config.getoption("--cloud")
 
 
+@pytest.fixture(scope="session", name="s3_server")
+def s3_server(cloud):
+    if cloud != "local_s3":
+        yield {}
+    # writable local S3 system
+    os.environ["BOTO_CONFIG"] = "/dev/null"
+    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+    os.environ["AWS_SECURITY_TOKEN"] = "testing"
+    os.environ["AWS_SESSION_TOKEN"] = "testing"
+    os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
+    requests = pytest.importorskip("requests")
+
+    pytest.importorskip("moto")
+
+    port = 5555
+    endpoint_uri = f"http://127.0.0.1:{port}/"
+    # pylint: disable=consider-using-with
+    proc = subprocess.Popen(
+        shlex.split(f"moto_server -p {port}"),
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+    )
+    try:
+        timeout = 5
+        while timeout > 0:
+            try:
+                r = requests.get(endpoint_uri, timeout=10)
+                if r.ok:
+                    break
+            except Exception:  # pylint: disable=broad-except
+                pass
+            timeout -= 0.1
+            time.sleep(0.1)
+        s3so = {
+            "client_kwargs": {"endpoint_url": endpoint_uri},
+            "use_listings_cache": True,
+            "anon": False,
+        }
+        yield s3so
+    finally:
+        proc.terminate()
+        proc.wait()
+
+
 @pytest.fixture(scope="session", name="cloud_path")
-def cloud_path(cloud):
+def cloud_path(cloud, s3_server, local_cloud_data_dir):
     if cloud == "abfs":
         storage_options = {
             "account_name": os.environ.get("ABFS_LINCCDATA_ACCOUNT_NAME"),
@@ -43,19 +92,43 @@ def cloud_path(cloud):
         assert root_dir.exists()
         return root_dir
 
+    if cloud == "local_s3":
+        s3so = s3_server
+        s3 = fsspec.filesystem("s3", **s3so)
+        bucket_name = "test_bucket"
+        s3.mkdir(bucket_name)
+        for x in Path(local_cloud_data_dir).glob("**/*"):
+            target_path = f"{bucket_name}/{x.relative_to(local_cloud_data_dir)}"
+            if x.is_file():
+                s3.upload(str(x), target_path)
+        s3.invalidate_cache()
+        root_dir = UPath(f"{bucket_name}", protocol="s3", **s3so)
+        assert root_dir.exists()
+        return root_dir
+
     raise NotImplementedError("Cloud format not implemented for tests!")
 
 
 @pytest.fixture(scope="session", name="storage_options")
-def storage_options(cloud):
+def storage_options(cloud, s3_server):
     if cloud == "abfs":
         storage_options = {
             "account_name": os.environ.get("ABFS_LINCCDATA_ACCOUNT_NAME"),
             "account_key": os.environ.get("ABFS_LINCCDATA_ACCOUNT_KEY"),
         }
         return storage_options
+    if cloud == "local_s3":
+        s3so = s3_server
+        s3so["protocol"] = "s3"
+        return s3so
 
     return {}
+
+
+@pytest.fixture(scope="session")
+def local_cloud_data_dir():
+    local_data_path = os.path.dirname(__file__)
+    return Path(local_data_path) / "cloud"
 
 
 @pytest.fixture
@@ -110,11 +183,15 @@ def small_sky_margin_dir_cloud(cloud_path):
 
 
 @pytest.fixture(scope="session", name="tmp_dir_cloud")
-def tmp_dir_cloud(cloud_path):
+def tmp_dir_cloud(cloud_path, cloud):
     """Create a single client for use by all unit test cases."""
+    real_directories = True
+    if cloud in ("local_s3"):
+        real_directories = False
     tmp = TempCloudDirectory(
         cloud_path / "tmp",
         method_name="full_test",
+        real_directories=real_directories,
     )
     yield tmp.open()
     tmp.close()
