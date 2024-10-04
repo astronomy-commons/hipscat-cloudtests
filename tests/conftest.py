@@ -5,14 +5,14 @@ import time
 from pathlib import Path
 
 import fsspec
-import hipscat as hc
+import hats as hc
 import lsdb
 import pytest
 import shortuuid
-from hipscat.io.file_io import file_io
+from hats.io.file_io import file_io
 from upath import UPath
 
-from hipscat_cloudtests.temp_cloud_directory import TempCloudDirectory
+from hats_cloudtests.temp_cloud_directory import TempCloudDirectory
 
 SMALL_SKY_XMATCH_NAME = "small_sky_xmatch"
 XMATCH_CORRECT_FILE = "xmatch_correct.csv"
@@ -213,22 +213,22 @@ def small_sky_xmatch_dir_cloud(cloud_path):
 
 @pytest.fixture
 def small_sky_catalog_cloud(small_sky_dir_cloud):
-    return lsdb.read_hipscat(small_sky_dir_cloud)
+    return lsdb.read_hats(small_sky_dir_cloud)
 
 
 @pytest.fixture
 def small_sky_xmatch_catalog_cloud(small_sky_xmatch_dir_cloud):
-    return lsdb.read_hipscat(small_sky_xmatch_dir_cloud)
+    return lsdb.read_hats(small_sky_xmatch_dir_cloud)
 
 
 @pytest.fixture
-def small_sky_order1_hipscat_catalog_cloud(small_sky_order1_dir_cloud):
-    return hc.catalog.Catalog.read_from_hipscat(small_sky_order1_dir_cloud)
+def small_sky_order1_hats_catalog_cloud(small_sky_order1_dir_cloud):
+    return hc.catalog.Catalog.read_hats(small_sky_order1_dir_cloud)
 
 
 @pytest.fixture
 def small_sky_order1_catalog_cloud(small_sky_order1_dir_cloud):
-    return lsdb.read_hipscat(small_sky_order1_dir_cloud)
+    return lsdb.read_hats(small_sky_order1_dir_cloud)
 
 
 @pytest.fixture
