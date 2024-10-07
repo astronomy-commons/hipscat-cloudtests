@@ -14,9 +14,9 @@ failure_notification:
 include_benchmarks: true
 include_docs: false
 mypy_type_checking: none
-package_name: hipscat_cloudtests
+package_name: hats_cloudtests
 project_license: BSD
-project_name: hipscat_cloudtests
+project_name: hats_cloudtests
 project_organization: astronomy-commons
 python_versions:
 - '3.9'

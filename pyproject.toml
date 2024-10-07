@@ -1,5 +1,5 @@
 [project]
-name = "hipscat_cloudtests"
+name = "hats_cloudtests"
 license = {file = "LICENSE"}
 readme = "README.md"
 authors = [
@@ -16,7 +16,7 @@ classifiers = [
 dynamic = ["version"]
 requires-python = ">=3.9"
 dependencies = [
-    # lsdb, hipscat, and hipscat-import are built from source via requirements.txt
+    # lsdb, hats, and hats-import are built from source via requirements.txt
     "adlfs",
     "s3fs",
     "moto[server]",
@@ -104,4 +104,4 @@ ignore = [
 ]
 
 [tool.coverage.run]
-omit=["src/hipscat_cloudtests/_version.py"]
+omit=["src/hats_cloudtests/_version.py"]

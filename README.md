@@ -1,11 +1,11 @@
-# hipscat cloudtests
+# hats cloudtests
 
 [![Template](https://img.shields.io/badge/Template-LINCC%20Frameworks%20Python%20Project%20Template-brightgreen)](https://lincc-ppt.readthedocs.io/en/latest/)
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat-cloudtests/smoke-test.yml)](https://github.com/astronomy-commons/hipscat-cloudtests/actions/workflows/smoke-test.yml)
-[![benchmarks](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hipscat-cloudtests/asv-main.yml?label=benchmarks)](https://astronomy-commons.github.io/hipscat-cloudtests/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hats-cloudtests/smoke-test.yml)](https://github.com/astronomy-commons/hats-cloudtests/actions/workflows/smoke-test.yml)
+[![benchmarks](https://img.shields.io/github/actions/workflow/status/astronomy-commons/hats-cloudtests/asv-main.yml?label=benchmarks)](https://astronomy-commons.github.io/hats-cloudtests/)
 
-Integration tests for cloud read and write through HiPScat and LSDB libraries.
+Integration tests for cloud read and write through HATS and LSDB libraries.
 
 ## Dev Guide - Getting Started
 
@@ -28,7 +28,7 @@ development using the following commands:
 >> conda install pandoc
 ```
 
-## Performing HiPSCat cloud tests locally
+## Performing HATS cloud tests locally
 
 The only currently implemented cloud platform is abfs. In order to run the tests, you will need to 
 export the following environmental variables in a command line:
@@ -64,13 +64,13 @@ There are various steps to have tests run on another cloud bucket provider (like
 @pytest.fixture
 def cloud_path(cloud):
     if cloud == "abfs":
-        return "abfs://hipscat/pytests/hipscat"
+        return "abfs://hats/pytests/hats"
     
     #your new addition
     elif cloud == "new_protocol":
-        return "new_protocol://path/to/pytest/hipscat"
+        return "new_protocol://path/to/pytest/hats"
 
-    raise NotImplementedError("Cloud format not implemented for hipscat tests!")
+    raise NotImplementedError("Cloud format not implemented for hats tests!")
 
 @pytest.fixture
 def storage_options(cloud):
@@ -106,9 +106,9 @@ def storage_options(cloud):
 
 ## Contributing
 
-[![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/astronomy-commons/hipscat-cloudtests?color=purple&label=Good%20first%20issues&query=is%3Aopen%20label%3A%22good%20first%20issue%22)](https://github.com/astronomy-commons/hipscat-cloudtests/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/astronomy-commons/hats-cloudtests?color=purple&label=Good%20first%20issues&query=is%3Aopen%20label%3A%22good%20first%20issue%22)](https://github.com/astronomy-commons/hats-cloudtests/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-See the [hipscat contribution guide](https://hipscat.readthedocs.io/en/latest/guide/contributing.html)
+See the [hats contribution guide](https://hats.readthedocs.io/en/latest/guide/contributing.html)
 for contribution best practices.
 
 ## Acknowledgements
