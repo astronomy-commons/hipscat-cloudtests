@@ -18,6 +18,8 @@ requires-python = ">=3.9"
 dependencies = [
     # lsdb, hipscat, and hipscat-import are built from source via requirements.txt
     "adlfs",
+    "s3fs",
+    "moto[server]",
     "shortuuid",
 ]
 
