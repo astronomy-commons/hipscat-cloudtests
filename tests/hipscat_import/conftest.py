@@ -1,6 +1,3 @@
-import os
-import os.path
-
 import pytest
 from dask.distributed import Client
 
@@ -15,4 +12,4 @@ def dask_client():
 
 @pytest.fixture
 def small_sky_parts_dir_cloud(cloud_path):
-    return os.path.join(cloud_path, "hipscat_import", "data", "small_sky_parts")
+    return cloud_path / "raw" / "small_sky_parts"

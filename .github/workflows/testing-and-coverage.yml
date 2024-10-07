@@ -29,9 +29,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e .[dev]
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Run ABFS unit tests with pytest
+    - name: Run local s3 with pytest
       run: |
-        python -m pytest tests --cloud abfs
-      env:
-        ABFS_LINCCDATA_ACCOUNT_NAME: ${{ secrets.LINCC_ABFS_ACCOUNT_NAME }}
-        ABFS_LINCCDATA_ACCOUNT_KEY: ${{ secrets.LINCC_ABFS_ACCOUNT_KEY }}
+        python -m pytest tests --cloud local_s3
+    # - name: Run ABFS unit tests with pytest
+    #   run: |
+    #     python -m pytest tests --cloud abfs
+    #   env:
+    #     ABFS_LINCCDATA_ACCOUNT_NAME: ${{ secrets.LINCC_ABFS_ACCOUNT_NAME }}
+    #     ABFS_LINCCDATA_ACCOUNT_KEY: ${{ secrets.LINCC_ABFS_ACCOUNT_KEY }}
