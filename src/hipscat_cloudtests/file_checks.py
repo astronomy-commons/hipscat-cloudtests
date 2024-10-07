@@ -9,7 +9,7 @@ from hipscat.io.file_io.file_io import load_text_file
 from hipscat.io.file_io.file_pointer import does_file_or_directory_exist
 
 
-def assert_text_file_matches(expected_lines, file_name, storage_options: dict = None):
+def assert_text_file_matches(expected_lines, file_name):
     """Convenience method to read a text file and compare the contents, line for line.
 
     When file contents get even a little bit big, it can be difficult to see
@@ -23,13 +23,10 @@ def assert_text_file_matches(expected_lines, file_name, storage_options: dict = 
 
     Args:
         expected_lines(:obj:`string array`) list of strings, formatted as regular expressions.
-        file_name (str): fully-specified path of the file to read
-        storage_options (dict): dictionary of filesystem storage options
+        file_name (UPath): fully-specified path of the file to read
     """
-    assert does_file_or_directory_exist(
-        file_name, storage_options=storage_options
-    ), f"file not found [{file_name}]"
-    contents = load_text_file(file_name, storage_options=storage_options)
+    assert does_file_or_directory_exist(file_name), f"file not found [{file_name}]"
+    contents = load_text_file(file_name)
 
     assert len(expected_lines) == len(
         contents
@@ -40,22 +37,19 @@ def assert_text_file_matches(expected_lines, file_name, storage_options: dict = 
         )
 
 
-def assert_parquet_file_ids(
-    file_name, id_column, schema: pa.Schema, expected_ids, resort_ids=True, storage_options: dict = None
-):
+def assert_parquet_file_ids(file_name, id_column, schema: pa.Schema, expected_ids, resort_ids=True):
     """
     Convenience method to read a parquet file and compare the object IDs to
     a list of expected objects.
 
     Args:
-        file_name (str): fully-specified path of the file to read
+        file_name (UPath): fully-specified path of the file to read
         id_column (str): column in the parquet file to read IDs from
         expected_ids (:obj:`int[]`): list of expected ids in `id_column`
         resort_ids (bool): should we re-sort the ids? if False, we will check that the ordering
             is the same between the read IDs and expected_ids
-        storage_options (dict): dictionary of filesystem storage options
     """
-    data_frame = pd.read_parquet(file_name, engine="pyarrow", schema=schema, storage_options=storage_options)
+    data_frame = pd.read_parquet(file_name.path, engine="pyarrow", schema=schema, filesystem=file_name.fs)
     assert id_column in data_frame.columns
     ids = data_frame[id_column].tolist()
     if resort_ids:

@@ -5,9 +5,9 @@ from hipscat.inspection import plot_pixels, plot_points
 # pylint: disable=no-member
 
 
-def test_generate_map_order1(small_sky_dir_cloud, storage_options, mocker):
+def test_generate_map_order1(small_sky_dir_cloud, mocker):
     """Basic test that map data can be generated (does not test that a plot is rendered)"""
-    cat = Catalog.read_from_hipscat(small_sky_dir_cloud, storage_options=storage_options)
+    cat = Catalog.read_from_hipscat(small_sky_dir_cloud)
 
     mocker.patch("healpy.mollview")
     plot_pixels(cat)
