@@ -39,9 +39,9 @@ def test_catalog_import_write_to_cloud(
     assert len(catalog.get_healpix_pixels()) == 1
 
     # Check that the catalog parquet file exists and contains correct object IDs
-    output_file = args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
+    output_file = args.catalog_path / "dataset" / "Norder=0" / "Dir=0" / "Npix=11.parquet"
 
-    expected_ids = [*range(700, 831)]
+    expected_ids = list(range(700, 831))
     assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids)
 
 
@@ -70,7 +70,7 @@ def test_catalog_import_read_from_cloud(dask_client, small_sky_parts_dir_cloud, 
     assert len(catalog.get_healpix_pixels()) == 1
 
     # Check that the catalog parquet file exists and contains correct object IDs
-    output_file = args.catalog_path / "Norder=0" / "Dir=0" / "Npix=11.parquet"
+    output_file = args.catalog_path / "dataset" / "Norder=0" / "Dir=0" / "Npix=11.parquet"
 
     expected_ids = [*range(700, 831)]
     assert_parquet_file_ids(output_file, "id", catalog.schema, expected_ids)

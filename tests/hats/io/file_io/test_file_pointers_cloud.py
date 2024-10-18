@@ -32,28 +32,23 @@ def test_find_files_matching_path(small_sky_dir_cloud):
 def test_find_files_matching_path_directory(small_sky_order1_dir_cloud):
     assert len(find_files_matching_path(small_sky_order1_dir_cloud)) == 1
 
-    ## wildcard in directory - will match all files at indicated depth
-    assert len(find_files_matching_path(small_sky_order1_dir_cloud, "*", "*", "*")) == 4
+    ## wildcard in directory - will match all files at INDICATED depth
+    assert len(find_files_matching_path(small_sky_order1_dir_cloud, "*", "*", "*", "*")) == 4
 
 
 def test_directory_has_contents(small_sky_order1_dir_cloud):
     assert directory_has_contents(small_sky_order1_dir_cloud)
 
 
-def test_get_directory_contents(small_sky_order1_dir_cloud, cloud):
+def test_get_directory_contents(small_sky_order1_dir_cloud):
     small_sky_contents = get_directory_contents(small_sky_order1_dir_cloud)
 
     expected = [
-        "Norder=1",
-        "_common_metadata",
-        "_metadata",
+        "dataset",
         "partition_info.csv",
         "point_map.fits",
         "properties",
     ]
-    if cloud == "local_s3":
-        # Sub-directories aren't really "a thing" for s3
-        expected = expected[1:]
 
     expected = [small_sky_order1_dir_cloud / file_name for file_name in expected]
 

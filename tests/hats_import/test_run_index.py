@@ -39,14 +39,16 @@ def test_run_index(
         ]
     )
 
-    outfile = args.catalog_path / "index" / "part.0.parquet"
+    outfile = args.catalog_path / "dataset" / "index" / "part.0.parquet"
     schema = read_parquet_metadata(outfile).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(args.catalog_path / "_metadata").schema.to_arrow_schema()
+    schema = read_parquet_metadata(args.catalog_path / "dataset" / "_metadata").schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(args.catalog_path / "_common_metadata").schema.to_arrow_schema()
+    schema = read_parquet_metadata(
+        args.catalog_path / "dataset" / "_common_metadata"
+    ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
 
@@ -79,12 +81,14 @@ def test_run_index_read_from_cloud(small_sky_order1_dir_cloud, tmp_path, dask_cl
         ]
     )
 
-    outfile = args.catalog_path / "index" / "part.0.parquet"
+    outfile = args.catalog_path / "dataset" / "index" / "part.0.parquet"
     schema = read_parquet_metadata(outfile).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(args.catalog_path / "_metadata").schema.to_arrow_schema()
+    schema = read_parquet_metadata(args.catalog_path / "dataset" / "_metadata").schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)
 
-    schema = read_parquet_metadata(args.catalog_path / "_common_metadata").schema.to_arrow_schema()
+    schema = read_parquet_metadata(
+        args.catalog_path / "dataset" / "_common_metadata"
+    ).schema.to_arrow_schema()
     assert schema.equals(basic_index_parquet_schema, check_metadata=False)

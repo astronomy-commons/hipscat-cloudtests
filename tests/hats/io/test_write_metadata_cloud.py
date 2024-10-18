@@ -29,18 +29,19 @@ def basic_catalog_parquet_metadata():
 def test_write_parquet_metadata(tmp_cloud_path, small_sky_dir_cloud, basic_catalog_parquet_metadata):
     """Use existing catalog parquet files and create new metadata files for it"""
     catalog_base_dir = tmp_cloud_path
+    dataset_dir = catalog_base_dir / "dataset"
 
     write_parquet_metadata(catalog_path=small_sky_dir_cloud, output_path=catalog_base_dir)
 
-    check_parquet_schema(catalog_base_dir / "_metadata", basic_catalog_parquet_metadata)
+    check_parquet_schema(dataset_dir / "_metadata", basic_catalog_parquet_metadata)
     ## _common_metadata has 0 row groups
-    check_parquet_schema(catalog_base_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
+    check_parquet_schema(dataset_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
 
     ## Re-write - should still have the same properties.
     write_parquet_metadata(catalog_path=small_sky_dir_cloud, output_path=catalog_base_dir)
-    check_parquet_schema(catalog_base_dir / "_metadata", basic_catalog_parquet_metadata)
+    check_parquet_schema(dataset_dir / "_metadata", basic_catalog_parquet_metadata)
     ## _common_metadata has 0 row groups
-    check_parquet_schema(catalog_base_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
+    check_parquet_schema(dataset_dir / "_common_metadata", basic_catalog_parquet_metadata, 0)
 
 
 def check_parquet_schema(file_path, expected_schema, expected_num_row_groups=1):
