@@ -1,3 +1,3 @@
-git+https://github.com/astronomy-commons/hipscat.git@hats
-git+https://github.com/astronomy-commons/hipscat-import.git@hats
-git+https://github.com/astronomy-commons/lsdb.git@hats
+git+https://github.com/astronomy-commons/hats.git@main
+git+https://github.com/astronomy-commons/hats-import.git@main
+git+https://github.com/astronomy-commons/lsdb.git@main
